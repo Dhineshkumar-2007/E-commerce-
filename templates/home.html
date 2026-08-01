@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi Vendor Marketplace</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Navbar -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            <h2>🛍️ ShopHub</h2>
+        </div>
+
+        <div class="search">
+            <input type="text" placeholder="Search Products...">
+            <button>Search</button>
+        </div>
+
+        <div class="nav-links">
+
+            <a href="/">Home</a>
+
+            <a href="/products">Products</a>
+
+            <a href="/vendors">Vendors</a>
+
+            <a href="/login">
+                <button class="login-btn">
+                    Login
+                </button>
+            </a>
+
+            <a href="/register">
+                <button class="register-btn">
+                    Register
+                </button>
+            </a>
+
+        </div>
+
+    </nav>
+
+    <!-- Hero -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <h1>One Marketplace.<br>Thousands of Trusted Vendors.</h1>
+
+            <p>
+                Buy products from verified sellers across India.
+            </p>
+
+            <a href="/products">
+                <button>Shop Now</button>
+            </a>
+
+            <a href="/register">
+                <button class="vendor-btn">
+                    Become a Vendor
+                </button>
+            </a>
+
+        </div>
+
+    </section>
+
+    <!-- Categories -->
+
+    <section class="categories">
+
+        <h2>Categories</h2>
+
+        <div class="category-container">
+
+            <div class="card">📱 Electronics</div>
+
+            <div class="card">👕 Fashion</div>
+
+            <div class="card">💻 Computers</div>
+
+            <div class="card">🛋 Furniture</div>
+
+            <div class="card">📚 Books</div>
+
+            <div class="card">🍎 Grocery</div>
+
+        </div>
+
+    </section>
+
+    <!-- Featured Products -->
+
+    <section class="products">
+
+        <h2>Featured Products</h2>
+
+        <div class="product-container">
+
+            <div class="product-card">
+                <img src="https://picsum.photos/250/180?1">
+                <h3>Wireless Headphones</h3>
+                <p>₹2,499</p>
+                <button>Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <img src="https://picsum.photos/250/180?2">
+                <h3>Gaming Keyboard</h3>
+                <p>₹1,999</p>
+                <button>Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <img src="https://picsum.photos/250/180?3">
+                <h3>Smart Watch</h3>
+                <p>₹3,499</p>
+                <button>Add to Cart</button>
+            </div>
+
+            <div class="product-card">
+                <img src="https://picsum.photos/250/180?4">
+                <h3>Bluetooth Speaker</h3>
+                <p>₹1,299</p>
+                <button>Add to Cart</button>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Vendors -->
+
+    <section class="vendors">
+
+        <h2>Top Vendors</h2>
+
+        <div class="vendor-container">
+
+            <div class="vendor-card">
+                <h3>Tech World</h3>
+                ⭐⭐⭐⭐⭐
+                <p>500+ Products</p>
+            </div>
+
+            <div class="vendor-card">
+                <h3>Fashion Hub</h3>
+                ⭐⭐⭐⭐☆
+                <p>300+ Products</p>
+            </div>
+
+            <div class="vendor-card">
+                <h3>Home Decor</h3>
+                ⭐⭐⭐⭐⭐
+                <p>250+ Products</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <footer>
+
+        © 2026 ShopHub | Multi Vendor Marketplace
+
+    </footer>
+
+</body>
+</html>
