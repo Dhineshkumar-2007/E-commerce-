@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Poppins,sans-serif;
+}
+
+body{
+    background:#f5f7fb;
+}
+
+.navbar{
+    background:#2563eb;
+    color:white;
+    padding:18px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logout{
+    background:red;
+    color:white;
+    border:none;
+    padding:10px 18px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.container{
+    width:90%;
+    margin:30px auto;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:25px;
+}
+
+.card{
+
+    background:white;
+
+    padding:30px;
+
+    text-align:center;
+
+    border-radius:12px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+}
+
+.card h2{
+    margin-top:10px;
+}
+
+button{
+
+    margin-top:20px;
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:10px 20px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+<h2>🛍 Customer Dashboard</h2>
+
+<a href="/">
+<button class="logout">Logout</button>
+</a>
+
+</div>
+
+<div class="container">
+
+<h1>Welcome Customer 👋</h1>
+
+<br>
+
+<div class="cards">
+
+<div class="card">
+<h1>🛒</h1>
+<h2>Browse Products</h2>
+<p>View all available products.</p>
+<a href="/products"><button>Open</button></a>
+</div>
+
+<div class="card">
+<h1>❤️</h1>
+<h2>Wishlist</h2>
+<p>Saved favourite products.</p>
+<button>Open</button>
+</div>
+
+<div class="card">
+<h1>📦</h1>
+<h2>My Orders</h2>
+<p>Track previous orders.</p>
+<button>Open</button>
+</div>
+
+<div class="card">
+<h1>👤</h1>
+<h2>Profile</h2>
+<p>Manage your profile.</p>
+<button>Open</button>
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>

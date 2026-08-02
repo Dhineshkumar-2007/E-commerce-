@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REGISTER</title>
+    <style>
+        .main{
+            margin-top: 50px;
+           background:#2563eb;
+            width: 300px;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            gap: 10px;
+            border-radius: 30px;
+            color: orange;
+        }
+        input{
+
+            border-radius: 20px;
+            height: 40px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <form class="main" action="/register" method="post">
+      
+
+<input type="text" name="name" placeholder="Enter your name" required>
+<input type="email" name="email" placeholder="Email" required>
+
+<input type="tel" name="phone" placeholder="Phone Number">
+
+<input type="password" name="password" placeholder="Password" required>
+
+<select name="role">
+    <option value="CUSTOMER">Customer</option>
+    <option value="VENDOR">Vendor</option>
+</select>
+
+        <input  type="submit" value="Register" style="background-color: rgb(195, 112, 53);color: aliceblue;font-weight: bolder;">
+    </form>
+    </center>
+</body>
+</html>
