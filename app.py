@@ -1,13 +1,16 @@
-from flask import Flask,render_template,request,redirect,url_for
+﻿import os
+
+from flask import Flask, render_template, request
 import mysql.connector
 
 app = Flask(__name__)
 
-db =mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="Sql.dk2007@14",
-    database="mydb1"
+
+db = mysql.connector.connect(
+host=os.getenv("DB_HOST", "localhost"),
+user=os.getenv("DB_USER", "root"),
+password="Sql.dk2007@14",
+database=os.getenv("DB_NAME", "mydb1")
 )
 
 cursor=db.cursor()
@@ -30,7 +33,7 @@ def register ():
     phone = request.form["phone"]
     password = request.form["password"]
     role = request.form["role"]
-
+    
     sql = """
     INSERT INTO users(name,email, phone, password_hash, role)
     VALUES ( %s,%s, %s, %s, %s)
@@ -88,17 +91,56 @@ def vendor_dashboard():
 
 @app.route("/products")
 def products():
-    return "<h1>Products Page</h1>"
+    return render_template("product.html")
+
 
 
 @app.route("/add-product")
 def add_product():
-    return "<h1>Add Product Page</h1>"
+    return render_template("add_product.html")
+
+
+@app.route("/add_product", methods=["POST"])
+def add_product_post():
+    # Collect form fields matching the products table schema
+    vendor_id = request.form.get("vendor_id")
+    name = request.form.get("name")
+    category_id = request.form.get("category_id") or None
+    description = request.form.get("description")
+
+    # Numeric/decimal fields: convert or default
+    try:
+        base_price = float(request.form.get("base_price", 0))
+    except ValueError:
+        base_price = 0.0
+    try:
+        mrp = float(request.form.get("mrp", base_price))
+    except ValueError:
+        mrp = base_price
+    try:
+        stock = int(request.form.get("stock", 0))
+    except ValueError:
+        stock = 0
+    try:
+        gst_rate = float(request.form.get("gst_rate", 0))
+    except ValueError:
+        gst_rate = 0.0
+
+    status = request.form.get("status") or "ACTIVE"
+
+    sql = """
+    INSERT INTO products (vendor_id, name, category_id, description, base_price, mrp, stock, gst_rate, status)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """
+
+    cursor.execute(sql, (vendor_id, name, category_id, description, base_price, mrp, stock, gst_rate, status))
+    db.commit()
+    return render_template("success.html")
 
 
 @app.route("/my-products")
 def my_products():
-    return "<h1>My Products Page</h1>"
+    return render_template("product.html")
 
 
 @app.route("/vendor-orders")
