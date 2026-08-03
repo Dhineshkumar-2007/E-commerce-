@@ -135,7 +135,7 @@ def add_product_post():
 
     cursor.execute(sql, (vendor_id, name, category_id, description, base_price, mrp, stock, gst_rate, status))
     db.commit()
-    return render_template("success.html")
+    return "<h1>added</h1>"
 
 
 @app.route("/my-products")

@@ -24,6 +24,12 @@
             height: 40px;
             width: 200px;
         }
+        #vendorFields{
+            display: none;
+        }
+        #gstin{
+            margin: 20px;
+        }
     </style>
 </head>
 <body>
@@ -34,17 +40,45 @@
 <input type="text" name="name" placeholder="Enter your name" required>
 <input type="email" name="email" placeholder="Email" required>
 
-<input type="tel" name="phone" placeholder="Phone Number">
+<input id="phone" type="tel" name="phone" placeholder="Phone Number">
 
 <input type="password" name="password" placeholder="Password" required>
 
-<select name="role">
+<select id="role" name="role">
     <option value="CUSTOMER">Customer</option>
     <option value="VENDOR">Vendor</option>
 </select>
 
+<div id="vendorFields">
+    <input id="gstin" type="text" name="gstin" placeholder="GSTIN">
+    <input id="pan" type="text" name="pan" placeholder="PAN">
+</div>
+
         <input  type="submit" value="Register" style="background-color: rgb(195, 112, 53);color: aliceblue;font-weight: bolder;">
     </form>
     </center>
+    <script>
+        const roleSelect = document.getElementById("role");
+        const vendorFields = document.getElementById("vendorFields");
+        const phoneField = document.getElementById("phone");
+        const gstinField = document.getElementById("gstin");
+        const panField = document.getElementById("pan");
+
+        function updateVendorForm() {
+            const isVendor = roleSelect.value === "VENDOR";
+            vendorFields.style.display = isVendor ? "block" : "none";
+            phoneField.required = isVendor;
+            gstinField.required = isVendor;
+            panField.required = isVendor;
+
+            if (!isVendor) {
+                gstinField.value = "";
+                panField.value = "";
+            }
+        }
+
+        roleSelect.addEventListener("change", updateVendorForm);
+        updateVendorForm();
+    </script>
 </body>
 </html>
