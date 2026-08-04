@@ -8,391 +8,121 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
     <style>
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:Arial, Helvetica, sans-serif;
-        }
+       /* General Page */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
 
-        body{
-            background:#f5f5f5;
-        }
+body {
+    background: #f5f7fa;
+    padding: 40px;
+}
 
-        .container{
-            width:90%;
-            max-width:1200px;
-            margin:40px auto;
-        }
+h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #333;
+    font-size: 2rem;
+}
 
-        .product-card{
-            display:flex;
-            gap:40px;
-            background:#fff;
-            padding:30px;
-            border-radius:12px;
-            box-shadow:0 5px 15px rgba(0,0,0,.1);
-            flex-wrap:wrap;
-        }
+/* Product Grid */
+.products-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+}
 
-        .product-image{
-            flex:1;
-            min-width:300px;
-        }
+/* Product Card */
+.product-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
 
-        .product-image img{
-            width:100%;
-            border-radius:10px;
-        }
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
 
-        .product-info{
-            flex:1;
-            min-width:300px;
-        }
+/* Product Image */
+.product-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
 
-        .product-info h1{
-            margin-bottom:10px;
-        }
+/* Card Content */
+.product-content {
+    padding: 18px;
+}
 
-        .rating{
-            color:orange;
-            margin-bottom:15px;
-        }
+.product-content h3 {
+    color: #222;
+    margin-bottom: 10px;
+    font-size: 22px;
+}
 
-        .price{
-            font-size:32px;
-            color:#28a745;
-            font-weight:bold;
-            margin:20px 0;
-        }
+.product-content p {
+    color: #666;
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
 
-        .description{
-            line-height:1.7;
-            margin-bottom:20px;
-            color:#555;
-        }
+.price {
+    color: #28a745;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
 
-        .stock{
-            font-weight:bold;
-            color:green;
-            margin-bottom:20px;
-        }
+/* Button */
+.btn {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    padding: 12px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: 0.3s;
+}
 
-        .quantity{
-            display:flex;
-            align-items:center;
-            gap:10px;
-            margin-bottom:25px;
-        }
-
-        .quantity input{
-            width:60px;
-            padding:8px;
-            text-align:center;
-        }
-
-        .buttons{
-            display:flex;
-            gap:15px;
-        }
-
-        .buttons button{
-            padding:12px 25px;
-            border:none;
-            border-radius:6px;
-            cursor:pointer;
-            font-size:16px;
-        }
-
-        .cart{
-            background:#007bff;
-            color:white;
-        }
-
-        .buy{
-            background:#28a745;
-            color:white;
-        }
-
-        .specs{
-            margin-top:40px;
-            background:white;
-            padding:25px;
-            border-radius:10px;
-        }
-
-        .specs h2{
-            margin-bottom:15px;
-        }
-
-        .specs table{
-            width:100%;
-            border-collapse:collapse;
-        }
-
-        .specs td{
-            padding:10px;
-            border-bottom:1px solid #ddd;
-        }
-
-        @media(max-width:768px){
-            .product-card{
-                flex-direction:column;
-            }
-        }
+.btn:hover {
+    background: #0056b3;
+}
     </style>
 
 </head>
 <body>
 
 <div class="container">
-
-    <div class="product-card">
-
-        <div class="product-image">
-            <img src="{{ url_for('static', filename='images/laptop.jpg') }}" alt="Product">
-        </div>
-
-        <div class="product-info">
-
-            <h1>Gaming Laptop</h1>
-
-            <div class="rating">
-                ⭐⭐⭐⭐⭐ (4.8/5)
-            </div>
-
-            <div class="price">
-                ₹79,999
-            </div>
-
-            <p class="description">
-                High-performance gaming laptop with Ryzen processor,
-                RTX graphics card, 16GB RAM and ultra-fast SSD.
-                Perfect for gaming, programming and video editing.
-            </p>
-
-            <div class="stock">
-                ✔ In Stock
-            </div>
-
-            <div class="quantity">
-                Quantity:
-                <input type="number" value="1" min="1">
-            </div>
-
-            <div class="buttons">
-                <button class="cart">Add to Cart</button>
-                <button class="buy">Buy Now</button>
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="specs">
-
-        <h2>Specifications</h2>
-
-        <table>
-
-            <tr>
-                <td><strong>Brand</strong></td>
-                <td>Lenovo</td>
-            </tr>
-
-            <tr>
-                <td><strong>Processor</strong></td>
-                <td>AMD Ryzen 7</td>
-            </tr>
-
-            <tr>
-                <td><strong>RAM</strong></td>
-                <td>16 GB</td>
-            </tr>
-
-            <tr>
-                <td><strong>Storage</strong></td>
-                <td>1 TB SSD</td>
-            </tr>
-
-            <tr>
-                <td><strong>Graphics</strong></td>
-                <td>NVIDIA RTX 4060</td>
-            </tr>
-
-            <tr>
-                <td><strong>Warranty</strong></td>
-                <td>1 Year</td>
-            </tr>
-
-        </table>
-
-    </div>
-
-
-    <div class="product-card">
-
-        <div class="product-image">
-            <img src="{{ url_for('static', filename='images/laptop.jpg') }}" alt="Product">
-        </div>
-
-        <div class="product-info">
-
-            <h1>Gaming Laptop</h1>
-
-            <div class="rating">
-                ⭐⭐⭐⭐⭐ (4.8/5)
-            </div>
-
-            <div class="price">
-                ₹79,999
-            </div>
-
-            <p class="description">
-                High-performance gaming laptop with Ryzen processor,
-                RTX graphics card, 16GB RAM and ultra-fast SSD.
-                Perfect for gaming, programming and video editing.
-            </p>
-
-            <div class="stock">
-                ✔ In Stock
-            </div>
-
-            <div class="quantity">
-                Quantity:
-                <input type="number" value="1" min="1">
-            </div>
-
-            <div class="buttons">
-                <button class="cart">Add to Cart</button>
-                <button class="buy">Buy Now</button>
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="specs">
-
-        <h2>Specifications</h2>
-
-        <table>
-
-            <tr>
-                <td><strong>Brand</strong></td>
-                <td>Lenovo</td>
-            </tr>
-
-            <tr>
-                <td><strong>Processor</strong></td>
-                <td>AMD Ryzen 7</td>
-            </tr>
-
-            <tr>
-                <td><strong>RAM</strong></td>
-                <td>16 GB</td>
-            </tr>
-
-            <tr>
-                <td><strong>Storage</strong></td>
-                <td>1 TB SSD</td>
-            </tr>
-
-            <tr>
-                <td><strong>Graphics</strong></td>
-                <td>NVIDIA RTX 4060</td>
-            </tr>
-
-            <tr>
-                <td><strong>Warranty</strong></td>
-                <td>1 Year</td>
-            </tr>
-
-        </table>
-
-    </div>
-
-    <div class="product-card">
-
-        <div class="product-image">
-            <img src="{{ url_for('static', filename='images/laptop.jpg') }}" alt="Product">
-        </div>
-
-        <div class="product-info">
-
-            <h1>Gaming Laptop</h1>
-
-            <div class="rating">
-                ⭐⭐⭐⭐⭐ (4.8/5)
-            </div>
-
-            <div class="price">
-                ₹79,999
-            </div>
-
-            <p class="description">
-                High-performance gaming laptop with Ryzen processor,
-                RTX graphics card, 16GB RAM and ultra-fast SSD.
-                Perfect for gaming, programming and video editing.
-            </p>
-
-            <div class="stock">
-                ✔ In Stock
-            </div>
-
-            <div class="quantity">
-                Quantity:
-                <input type="number" value="1" min="1">
-            </div>
-
-            <div class="buttons">
-                <button class="cart">Add to Cart</button>
-                <button class="buy">Buy Now</button>
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="specs">
-
-        <h2>Specifications</h2>
-
-        <table>
-
-            <tr>
-                <td><strong>Brand</strong></td>
-                <td>Lenovo</td>
-            </tr>
-
-            <tr>
-                <td><strong>Processor</strong></td>
-                <td>AMD Ryzen 7</td>
-            </tr>
-
-            <tr>
-                <td><strong>RAM</strong></td>
-                <td>16 GB</td>
-            </tr>
-
-            <tr>
-                <td><strong>Storage</strong></td>
-                <td>1 TB SSD</td>
-            </tr>
-
-            <tr>
-                <td><strong>Graphics</strong></td>
-                <td>NVIDIA RTX 4060</td>
-            </tr>
-
-            <tr>
-                <td><strong>Warranty</strong></td>
-                <td>1 Year</td>
-            </tr>
-
-        </table>
-
-    </div>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Products</title>
+</head>
+<body>
+
+<h1>All Products</h1>
+
+{% for product in products %}
+<div class="product-card">
+    <img src="{{ product.image }}" width="200">
+    <h3>{{ product.name }}</h3>
+    <p>{{ product.description }}</p>
+    <p>₹{{ product.price }}</p>
+</div>
+<hr>
+{% endfor %}
+
+</body>
+</html>
 
 </div>
 

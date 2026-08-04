@@ -72,6 +72,9 @@ def login_():
 
         elif role == "VENDOR":
             return render_template("vendor_dashboard.html")
+        elif role == "ADMIN":
+            return render_template("admin_page.html")
+        
 
     return render_template(
         "login.html",
@@ -89,9 +92,19 @@ def vendor_dashboard():
     return render_template("vendor_dashboard.html")
 
 
-@app.route("/products")
-def products():
-    return render_template("product.html")
+@app.route("/products",methods=["GET"])
+def get_products():
+
+    cursor = db.cursor(dictionary=True)
+
+    cursor.execute("SELECT product_name,description,price FROM products")
+    products = cursor.fetchall()
+
+    cursor.close()
+    db.close()
+
+    return render_template("products.html", products=products)
+
 
 
 
