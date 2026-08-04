@@ -64,11 +64,7 @@
                 <button>Shop Now</button>
             </a>
 
-            <a href="/register">
-                <button class="vendor-btn">
-                    Become a Vendor
-                </button>
-            </a>
+            
 
         </div>
 
@@ -101,38 +97,24 @@
     <!-- Featured Products -->
 
     <section class="products">
-
+<div class="featured-title">
+    
         <h2>Featured Products</h2>
-
+          <a href="/products">
+                <button>View all </button>
+            </a>
+</div>
+        
         <div class="product-container">
-
+            {% for product in products %}
             <div class="product-card">
-                <img src="https://picsum.photos/250/180?1">
-                <h3>Wireless Headphones</h3>
-                <p>₹2,499</p>
-                <button>Add to Cart</button>
+               <img src="https://picsum.photos/seed/{{ product.name }}/300/300">
+                <h3>{{ product.name }}</h3>
+                
+                <p>₹{{ product.mrp }}</p>
             </div>
 
-            <div class="product-card">
-                <img src="https://picsum.photos/250/180?2">
-                <h3>Gaming Keyboard</h3>
-                <p>₹1,999</p>
-                <button>Add to Cart</button>
-            </div>
-
-            <div class="product-card">
-                <img src="https://picsum.photos/250/180?3">
-                <h3>Smart Watch</h3>
-                <p>₹3,499</p>
-                <button>Add to Cart</button>
-            </div>
-
-            <div class="product-card">
-                <img src="https://picsum.photos/250/180?4">
-                <h3>Bluetooth Speaker</h3>
-                <p>₹1,299</p>
-                <button>Add to Cart</button>
-            </div>
+            {% endfor %}
 
         </div>
 

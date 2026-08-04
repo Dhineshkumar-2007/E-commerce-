@@ -1,6 +1,6 @@
 ﻿import os
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import mysql.connector
 
 app = Flask(__name__)
@@ -17,7 +17,13 @@ cursor=db.cursor()
 
 @app.route("/")
 def home():
-    return render_template("home.html")
+    cursor = db.cursor(dictionary=True)
+
+    cursor.execute("SELECT name , description, mrp  FROM products LIMIT 4")
+    products = cursor.fetchall()
+    return render_template("home.html", products=products)
+
+
 
 
 
@@ -45,7 +51,7 @@ def register ():
 
 @app.route("/login")
 def login_page():
-    return render_template("/login.html")
+    return render_template("login.html")
 
  #Login check
 @app.route("/login", methods=["POST"])
@@ -97,13 +103,15 @@ def get_products():
 
     cursor = db.cursor(dictionary=True)
 
-    cursor.execute("SELECT product_name,description,price FROM products")
+    cursor.execute("SELECT name , description, mrp  FROM products")
     products = cursor.fetchall()
 
-    cursor.close()
-    db.close()
+    
 
-    return render_template("products.html", products=products)
+    return render_template("product.html", products=products)
+
+
+
 
 
 
