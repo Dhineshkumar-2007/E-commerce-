@@ -6,12 +6,18 @@ import mysql.connector
 app = Flask(__name__)
 
 
+
+
+
 db = mysql.connector.connect(
-host=os.getenv("DB_HOST", "localhost"),
-user=os.getenv("DB_USER", "root"),
-password="Sql.dk2007@14",
-database=os.getenv("DB_NAME", "mydb1")
+    host=os.getenv("DB_HOST", "mysql-c921c5d-ecommerce-ecd0.b.aivencloud.com"),
+    port=int(os.getenv("DB_PORT", "10167")),
+    user=os.getenv("DB_USER", "avnadmin"),
+    password=os.getenv("DB_PASSWORD", ""),
+    database="defaultdb",
+  ssl_ca=r"C:\Users\Dhinesh\Downloads\ca.pem"
 )
+
 
 cursor=db.cursor()
 
