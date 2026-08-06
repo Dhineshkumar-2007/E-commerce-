@@ -32,7 +32,7 @@ def home():
     return render_template("home.html", products=products)
     
 @app.route("/search")
-def search():
+def search_product():
 
     search = request.args.get("search", "")
 
