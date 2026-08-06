@@ -28,6 +28,25 @@ def home():
 
     cursor.execute("SELECT name , description, mrp  FROM products LIMIT 4")
     products = cursor.fetchall()
+
+    search = request.args.get("search", "")
+
+    if search:
+        cursor.execute("""
+            SELECT name, description, mrp
+            FROM products
+            WHERE name LIKE %s
+            LIMIT 4
+        """, ("%" + search + "%",))
+    else:
+        cursor.execute("""
+            SELECT name, description, mrp
+            FROM products
+            LIMIT 4
+        """)
+
+    products = cursor.fetchall()
+    
     return render_template("home.html", products=products)
 
 
