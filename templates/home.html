@@ -166,35 +166,39 @@
     </footer>
 
 </body>
-    <script>    
-    
-    <script>
+  <script>
 function searchProducts() {
+
     let search = document.getElementById("searchBox").value;
 
     fetch("/search?search=" + encodeURIComponent(search))
-        .then(res => res.json())
+        .then(response => response.json())
         .then(data => {
 
             let html = "";
 
             if(data.length === 0){
                 html = "<p>No products found.</p>";
-            } else {
+            }
+            else{
+
                 data.forEach(product => {
+
                     html += `
-                        <div class="product-card">
-                            <h3>${product.name}</h3>
-                            <p>${product.description}</p>
-                            <strong>₹${product.mrp}</strong>
-                            <hr>
-                        </div>
+                    <div class="product-card">
+                        <h3>${product.name}</h3>
+                        <p>${product.description}</p>
+                        <strong>₹${product.mrp}</strong>
+                    </div>
                     `;
+
                 });
+
             }
 
             document.getElementById("results").innerHTML = html;
             document.getElementById("searchModal").style.display = "block";
+
         });
 }
 
@@ -202,6 +206,4 @@ function closeModal(){
     document.getElementById("searchModal").style.display = "none";
 }
 </script>
-    
-    </script>
 </html>
