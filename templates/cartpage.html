@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Cart</title>
+
+<style>
+
+body{
+
+    background:#f5f5f5;
+    font-family:Arial;
+
+}
+
+.cart{
+
+    width:80%;
+    margin:auto;
+
+}
+
+.item{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:white;
+    padding:20px;
+    margin-top:20px;
+    border-radius:15px;
+
+}
+
+button{
+
+    background:red;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    border-radius:8px;
+
+}
+
+.checkout{
+
+    margin-top:30px;
+    text-align:right;
+
+}
+
+.checkout button{
+
+    background:green;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1 align="center">
+
+My Cart
+
+</h1>
+
+<div class="cart">
+
+{% if cart %}
+
+{% for item in cart %}
+
+<div class="item">
+
+<div>
+
+<h2>{{ item.name }}</h2>
+
+<p>{{ item.description }}</p>
+
+<p>
+
+Price : ₹{{ item.mrp }}
+
+</p>
+
+<p>
+
+Quantity : {{ item.quantity }}
+
+</p>
+
+<p>
+
+Subtotal : ₹{{ item.mrp * item.quantity }}
+
+</p>
+
+</div>
+
+<div>
+
+<a href="/remove/{{ item.id }}">
+
+<button>
+
+Remove
+
+</button>
+
+</a>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+<div class="checkout">
+
+<h2>
+
+Grand Total : ₹{{ total }}
+
+</h2>
+
+<button>
+
+Checkout
+
+</button>
+
+</div>
+
+{% else %}
+
+<h2 align="center">
+
+Your Cart Is Empty
+
+</h2>
+
+{% endif %}
+
+</div>
+
+</body>
+
+</html>

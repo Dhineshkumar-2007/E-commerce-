@@ -1,140 +1,142 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<style>
 
-    <style>
-       /* General Page */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
-body {
-    background: #f5f7fa;
-    padding: 40px;
+body{
+    background:#f5f7fa;
+    padding:40px;
 }
 
-h1 {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #333;
-    font-size: 2rem;
+h1{
+    text-align:center;
+    margin-bottom:30px;
+    color:#333;
 }
 
+.products-container{
 
-.products-container {
-    display: flex;
-    justify-content: space-between;
-    align-items:flex-start;
-    flex-direction: row;
-    padding: 10px;
-    gap: 2px;
-    background: #878484;
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+    justify-content:center;
+
 }
 
-/* Product Card */
-.product-card {
-    background: #fcfafa;
-    border-radius: 12px;
-    
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    transition: 0.3s;
-    width: 150px;
-    height: 180px;
-    
+.product-card{
+
+    background:white;
+    width:250px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+    text-align:center;
+    padding:20px;
+    transition:.3s;
+
 }
 
-.product-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+.product-card:hover{
+
+    transform:translateY(-8px);
+
 }
 
-/* Product Image */
-.product-card img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 20px;
+.product-card img{
+
+    width:150px;
+    height:150px;
+    border-radius:15px;
+    object-fit:cover;
+
 }
 
-/* Card Content */
-.product-content {
-    padding: 18px;
+.product-content{
+
+    margin-top:15px;
+
 }
 
-.product-content h3 {
-    color: #222;
-    margin-bottom: 2px;
-    font-size: 22px;
+.product-content h3{
+
+    margin-bottom:10px;
+
 }
 
-.product-content p {
-    color: #666;
-    margin-bottom: 2px;
-    line-height: 1.5;
+.product-content p{
+
+    color:#555;
+    margin-bottom:10px;
+
 }
 
-.price {
-    color: #28a745;
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: 15px;
+.price{
+
+    font-size:22px;
+    color:green;
+    font-weight:bold;
+    margin-bottom:15px;
+
 }
 
-/* Button */
-.btn {
-    display: inline-block;
-    width: 100%;
-    text-align: center;
-    padding: 12px;
-    background: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: 0.3s;
+.btn{
+
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:#007bff;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+
 }
 
-.btn:hover {
-    background: #0056b3;
+.btn:hover{
+
+    background:#0056b3;
+
 }
-    </style>
 
-</head>
-<body>
-
-<div class="container">
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Products</title>
-</head>
-<body>
+</style>
 
 <h1>All Products</h1>
-<div class="product-container">
-    
+
+<div class="products-container">
+
 {% for product in products %}
+
 <div class="product-card">
-    <img src="https://picsum.photos/seed/{{ product.name }}/300/300">
-    <h3>{{ product.name }}</h3>
-    
-    <p>₹{{ product.mrp }}</p>
+
+    <img src="https://picsum.photos/200?random={{ product.id }}">
+
+    <div class="product-content">
+
+        <h3>{{ product.name }}</h3>
+
+        <p>{{ product.description }}</p>
+
+        <div class="price">
+            ₹{{ product.mrp }}
+        </div>
+
+        <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST">
+
+            <button class="btn">
+                Add To Cart
+            </button>
+
+        </form>
+
+    </div>
+
 </div>
 
 {% endfor %}
-</div>
-
-</body>
-</html>
 
 </div>
-
-</body>
-</html>

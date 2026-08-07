@@ -1,209 +1,291 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi Vendor Marketplace</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>ShopHub</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 </head>
+
 <body>
 
-    <!-- Navbar -->
+<!-- ================= NAVBAR ================= -->
 
-    <nav class="navbar">
+<nav class="navbar">
 
-        <div class="logo">
-            <h2>🛍️ ShopHub</h2>
-        </div>
-
-      <div class="search">
-        <input type="text" id="searchBox" placeholder="Search Products...">
-       <button type="button" onclick="searchProducts()">Search</button>
+    <div class="logo">
+        <h2>🛍️ ShopHub</h2>
     </div>
 
-<!-- Popup -->
+    <div class="search">
+
+        <input
+            type="text"
+            id="searchBox"
+            placeholder="Search Products..."
+        >
+
+        <button
+            type="button"
+            onclick="searchProducts()"
+        >
+            Search
+        </button>
+
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/">Home</a>
+
+        <a href="/products">Products</a>
+
+        <a href="/cart">🛒 Cart</a>
+
+        <a href="/login">
+            <button class="login-btn">
+                Login
+            </button>
+        </a>
+
+        <a href="/register">
+            <button class="register-btn">
+                Register
+            </button>
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h1>
+
+            One Marketplace.<br>
+
+            Thousands of Trusted Vendors.
+
+        </h1>
+
+        <p>
+
+            Buy products from verified sellers across India.
+
+        </p>
+
+        <a href="/products">
+
+            <button>
+
+                Shop Now
+
+            </button>
+
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- ================= CATEGORIES ================= -->
+
+<section class="categories">
+
+    <h2>Categories</h2>
+
+    <div class="category-container">
+
+        <div class="card">
+            📱 Electronics
+        </div>
+
+        <div class="card">
+            👕 Fashion
+        </div>
+
+        <div class="card">
+            💻 Computers
+        </div>
+
+        <div class="card">
+            🛋 Furniture
+        </div>
+
+        <div class="card">
+            📚 Books
+        </div>
+
+        <div class="card">
+            🍎 Grocery
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FEATURED PRODUCTS ================= -->
+
+<section class="products">
+
+<h2>Featured Products</h2>
+
+<a href="/products">
+
+<button>
+
+View All Products
+
+</button>
+
+</a>
+
+
+<div class="product-container">
+
+{% for product in products %}
+
+<div class="product-card">
+
+<img
+src="https://picsum.photos/seed/{{ product.id }}/300/300"
+>
+
+<h3>
+
+{{ product.name }}
+
+</h3>
+
+<p>
+
+{{ product.description }}
+
+</p>
+
+<p>
+
+₹{{ product.mrp }}
+
+</p>
+
+<form
+action="/add-to-cart/{{ product.id }}"
+method="POST"
+>
+
+<button type="submit">
+
+Add To Cart
+
+</button>
+
+</form>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</section>
+
+<!-- ================= TOP VENDORS ================= -->
+
+<section class="vendors">
+
+    <h2>Top Vendors</h2>
+
+    <div class="vendor-container">
+
+        <div class="vendor-card">
+            <h3>Tech World</h3>
+            <p>⭐⭐⭐⭐⭐</p>
+            <p>500+ Products</p>
+        </div>
+
+        <div class="vendor-card">
+            <h3>Fashion Hub</h3>
+            <p>⭐⭐⭐⭐☆</p>
+            <p>300+ Products</p>
+        </div>
+
+        <div class="vendor-card">
+            <h3>Home Decor</h3>
+            <p>⭐⭐⭐⭐⭐</p>
+            <p>250+ Products</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= SEARCH RESULTS MODAL ================= -->
+
 <div id="searchModal" class="modal">
+
     <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
+
+        <span class="close" onclick="closeModal()">
+            &times;
+        </span>
+
         <h2>Search Results</h2>
-        <div id="results"></div>
+
+        <div id="results">
+
+        </div>
+
     </div>
+
 </div>
 
-        <div class="nav-links">
 
-            <a href="/">Home</a>
+<!-- ================= FOOTER ================= -->
 
-            <a href="/products">Products</a>
+<footer>
+
+    <h3>🛍️ ShopHub</h3>
+
+    <p>
+
+        One Marketplace. Thousands of Trusted Vendors.
+
+    </p>
+
+    <br>
+
+    <p>
+
+        © 2026 ShopHub | All Rights Reserved
+
+    </p>
+
+</footer>
 
 
-            <a href="/login">
-                <button class="login-btn">
-                    Login
-                </button>
-            </a>
+<!-- ================= JAVASCRIPT ================= -->
 
-            <a href="/register">
-                <button class="register-btn">
-                    Register
-                </button>
-            </a>
-
-        </div>
-
-    </nav>
-
-    <!-- Hero -->
-
-    <section class="hero">
-
-        <div class="hero-content">
-
-            <h1>One Marketplace.<br>Thousands of Trusted Vendors.</h1>
-
-            <p>
-                Buy products from verified sellers across India.
-            </p>
-
-            <a href="/products">
-                <button>Shop Now</button>
-            </a>
-
-            
-
-        </div>
-
-    </section>
-
-    <!-- Categories -->
-
-    <section class="categories">
-
-        <h2>Categories</h2>
-
-        <div class="category-container">
-
-            <div class="card">📱 Electronics</div>
-
-            <div class="card">👕 Fashion</div>
-
-            <div class="card">💻 Computers</div>
-
-            <div class="card">🛋 Furniture</div>
-
-            <div class="card">📚 Books</div>
-
-            <div class="card">🍎 Grocery</div>
-
-        </div>
-
-    </section>
-
-    <!-- Featured Products -->
-
-    <section class="products">
-<div class="featured-title">
-    
-        <h2>Featured Products</h2>
-          <a href="/products">
-                <button>View all </button>
-            </a>
-</div>
-        
-        <div class="product-container">
-            {% for product in products %}
-            <div class="product-card">
-               <img src="https://picsum.photos/seed/{{ product.name }}/300/300">
-                <h3>{{ product.name }}</h3>
-                
-                <p>₹{{ product.mrp }}</p>
-            </div>
-
-            {% endfor %}
-
-        </div>
-
-    </section>
-
-    <!-- Vendors -->
-
-    <section class="vendors">
-
-        <h2>Top Vendors</h2>
-
-        <div class="vendor-container">
-
-            <div class="vendor-card">
-                <h3>Tech World</h3>
-                ⭐⭐⭐⭐⭐
-                <p>500+ Products</p>
-            </div>
-
-            <div class="vendor-card">
-                <h3>Fashion Hub</h3>
-                ⭐⭐⭐⭐☆
-                <p>300+ Products</p>
-            </div>
-
-            <div class="vendor-card">
-                <h3>Home Decor</h3>
-                ⭐⭐⭐⭐⭐
-                <p>250+ Products</p>
-            </div>
-
-        </div>
-
-    </section>
-
-    <footer>
-
-        © 2026 ShopHub | Multi Vendor Marketplace
-
-    </footer>
+<script src="{{ url_for('static', filename='js/home.js') }}"></script>
 
 </body>
-  <script>
-function searchProducts() {
 
-    let search = document.getElementById("searchBox").value;
-
-    fetch("/search?search=" + encodeURIComponent(search))
-        .then(response => response.json())
-        .then(data => {
-
-            let html = "";
-
-            if(data.length === 0){
-                html = "<p>No products found.</p>";
-            }
-            else{
-
-                data.forEach(product => {
-
-                    html += `
-                    <div class="product-card">
-                        <h3>${product.name}</h3>
-                        <p>${product.description}</p>
-                        <strong>₹${product.mrp}</strong>
-                    </div>
-                    `;
-
-                });
-
-            }
-
-            document.getElementById("results").innerHTML = html;
-            document.getElementById("searchModal").style.display = "block";
-
-        });
-}
-
-function closeModal(){
-    document.getElementById("searchModal").style.display = "none";
-}
-</script>
 </html>
