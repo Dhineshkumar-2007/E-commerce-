@@ -56,6 +56,12 @@ button{
     background:green;
 
 }
+.item img{
+    width:150px;
+    height:150px;
+    object-fit:cover;
+    border-radius:15px;
+}
 
 </style>
 
@@ -78,7 +84,7 @@ My Cart
 <div class="item">
 
 <div>
-
+<img src="https://picsum.photos/seed/{{ item.id }}/300/300" alt="{{ item.name }}">
 <h2>{{ item.name }}</h2>
 
 <p>{{ item.description }}</p>
