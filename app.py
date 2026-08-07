@@ -345,7 +345,7 @@ def cart():
         grand_total += float(item["mrp"]) * int(item["quantity"])
 
     return render_template(
-        "cart.html",
+        "cartpage.html",
         cart=cart,
         total=grand_total
     )
