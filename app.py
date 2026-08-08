@@ -15,7 +15,13 @@ from flask import (
 )
 
 app = Flask(__name__)
-app.secret_key = "my_secret_key"
+
+
+app.secret_key = os.getenv("SECRET_KEY")
+
+app.config["SESSION_COOKIE_SECURE"] = True
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
 
 #OTP 
@@ -41,6 +47,7 @@ db = mysql.connector.connect(
     password=os.getenv("DB_PASSWORD"),
     database=os.getenv("DB_NAME"),
     ssl_ca=os.getenv("DB_SSL_CA")
+    
 )
 
 # ===========================
