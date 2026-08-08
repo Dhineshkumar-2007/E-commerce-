@@ -130,3 +130,27 @@ document.getElementById("searchBox")
     }
 
 });
+
+
+function addToCart(button) {
+if (user){
+    
+    const id = button.dataset.id;
+    
+    fetch("/add-to-cart/" + id, {
+        method: "POST"
+    })
+    .then(response => {
+        
+        if (response.ok) {
+            button.innerText = "In cart";
+            button.disabled = true;
+            button.style.background="blue"
+        }
+        
+    })
+    .catch(error => {
+        console.log(error);
+    });
+}
+}

@@ -1,5 +1,8 @@
 ﻿import os
 import mysql.connector
+import math,random
+from dotenv import load_dotenv
+from werkzeug import security
 
 from flask import (
     Flask,
@@ -14,17 +17,30 @@ from flask import (
 app = Flask(__name__)
 app.secret_key = "my_secret_key"
 
+
+#OTP 
+def generateOTP():
+    digits="1234567890"
+    OTP=""
+    for i in range(4):
+        OTP+=digits[math.floor(random.random()*10)]
+    return OTP
+
+
+
+#Loading .env file
+load_dotenv()
 # ===========================
 # DATABASE CONFIG
 # ===========================
 
 db = mysql.connector.connect(
-    host=os.getenv("DB_HOST", "mysql-c921c5d-ecommerce-ecd0.b.aivencloud.com"),
-    port=int(os.getenv("DB_PORT", "10167")),
-    user=os.getenv("DB_USER", "avnadmin"),
-    password=os.getenv("DB_PASSWORD", ""),
-    database="defaultdb",
-    ssl_ca=r"C:\Users\Dhinesh\Downloads\ca.pem"
+    host=os.getenv("DB_HOST"),
+    port=int(os.getenv("DB_PORT")),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+    database=os.getenv("DB_NAME"),
+    ssl_ca=os.getenv("DB_SSL_CA")
 )
 
 # ===========================
@@ -44,10 +60,19 @@ def home():
 
     products = cursor.fetchall()
 
+     # Get cart from session
+    cart = session.get("cart", [])
+
+    # Get only product IDs
+    cart_ids = [item["id"] for item in cart]
+
     return render_template(
         "home.html",
-        products=products
+        products=products,cart_ids=cart_ids
     )
+
+
+
 
 
 # ===========================
@@ -95,6 +120,8 @@ def register():
     password = request.form["password"]
     role = request.form["role"]
 
+    password_hash=security.generate_password_hash(password)
+    
     cursor = db.cursor()
 
     sql = """
@@ -123,10 +150,13 @@ def register():
             name,
             email,
             phone,
-            password,
+            password_hash,
             role
         )
     )
+
+
+  
 
     db.commit()
 
@@ -159,28 +189,28 @@ def login():
     SELECT
         id,
         name,
-        role
+        role,
+        password_hash
 
     FROM users
 
     WHERE
         email=%s
-        AND
-        password_hash=%s
+        
     """
-
-    cursor.execute(sql, (email, password))
+    cursor.execute(sql, (email, ))
+    
 
     user = cursor.fetchone()
 
-    if user:
+    if user  and security.check_password_hash(user[3],password) :
 
-        session["user_id"] = user[0]
+        session["id"] = user[0]
         session["name"] = user[1]
         session["role"] = user[2]
 
         if user[2] == "CUSTOMER":
-            return redirect(url_for("customer_dashboard"))
+            return redirect(url_for("home"))
 
         elif user[2] == "VENDOR":
             return redirect(url_for("vendor_dashboard"))
@@ -192,6 +222,7 @@ def login():
         "login.html",
         error="Invalid Email or Password"
     )
+    
 
 
 # ===========================
@@ -212,7 +243,7 @@ def logout():
 @app.route("/customer")
 def customer_dashboard():
 
-    if "user_id" not in session:
+    if "id" not in session:
         return redirect(url_for("login_page"))
 
     if session["role"] != "CUSTOMER":
@@ -228,12 +259,11 @@ def customer_dashboard():
 @app.route("/vendor")
 def vendor_dashboard():
 
-    if "user_id" not in session:
+    if "id" not in session : 
         return redirect(url_for("login_page"))
-
-    if session["role"] != "VENDOR":
-        return "Access Denied", 403
-
+    elif session["role"] != "VENDOR" :
+        return "acces denied",403
+    
     return render_template("vendor_dashboard.html")
 
 
@@ -244,7 +274,7 @@ def vendor_dashboard():
 @app.route("/admin")
 def admin_dashboard():
 
-    if "user_id" not in session:
+    if "id" not in session:
         return redirect(url_for("login_page"))
 
     if session["role"] != "ADMIN":
@@ -273,9 +303,13 @@ def get_products():
 
     products = cursor.fetchall()
 
+    cart = session.get("cart", [])
+
+    cart_ids = [item["id"] for item in cart]
+
     return render_template(
         "product.html",
-        products=products
+        products=products,cart_ids=cart_ids
     )
 
 
@@ -326,7 +360,7 @@ def add_to_cart(product_id):
 
     session["cart"] = cart
 
-    return redirect(url_for("cart"))
+    return "ok"
 
 
 # ===========================
@@ -388,7 +422,7 @@ def clear_cart():
 @app.route("/add-product")
 def add_product():
 
-    if "user_id" not in session:
+    if "id" not in session:
         return redirect(url_for("login_page"))
 
     if session["role"] != "VENDOR":
@@ -404,13 +438,13 @@ def add_product():
 @app.route("/add_product", methods=["POST"])
 def add_product_post():
 
-    if "user_id" not in session:
+    if "id" not in session:
         return redirect(url_for("login_page"))
 
     if session["role"] != "VENDOR":
         return "Access Denied", 403
 
-    vendor_id = request.form.get("vendor_id")
+    vendor_id = session["id"]
     name = request.form.get("name")
     category_id = request.form.get("category_id")
     description = request.form.get("description")
@@ -485,7 +519,7 @@ def add_product_post():
 @app.route("/my-products")
 def my_products():
 
-    if "user_id" not in session:
+    if "id" not in session:
         return redirect(url_for("login_page"))
 
     if session["role"] != "VENDOR":
@@ -495,20 +529,20 @@ def my_products():
 
     cursor.execute("""
         SELECT
-            id,
-            name,
-            description,
-            mrp,
-            stock,
-            status
+        id,
+        name,
+        description,
+        mrp,
+        stock,
+        status
         FROM products
-        WHERE vendor_id=%s
-    """, (session["user_id"],))
+        WHERE vendor_id = %s
+        """, (session["id"],))
 
     products = cursor.fetchall()
 
     return render_template(
-        "product.html",
+        "my_products.html",
         products=products
     )
 

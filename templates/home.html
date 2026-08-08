@@ -51,6 +51,13 @@
         <a href="/products">Products</a>
 
         <a href="/cart">🛒 Cart</a>
+        {% if session.get("id") %}
+          <a href="/logout">
+            <button class="logout">
+                Logout
+            </button>
+        </a>
+        {% else %}
 
         <a href="/login">
             <button class="login-btn">
@@ -63,6 +70,7 @@
                 Register
             </button>
         </a>
+        {% endif %}
 
     </div>
 
@@ -77,9 +85,7 @@
 
         <h1>
 
-            One Marketplace.<br>
-
-            Thousands of Trusted Vendors.
+            Welcome <span>{{session.name}}</span>
 
         </h1>
 
@@ -149,9 +155,9 @@
 
 <a href="/products">
 
-<button>
+<button class="view-all-btn">
 
-View All Products
+View All Products >>
 
 </button>
 
@@ -190,12 +196,23 @@ src="https://picsum.photos/seed/{{ product.id }}/300/300"
 action="/add-to-cart/{{ product.id }}"
 method="POST"
 >
+{% if product.id in cart_ids %}
 
-<button type="submit">
+<button type="submit" disabled style="background-color: rgb(62, 62, 230);">
 
-Add To Cart
+In cart 
 
 </button>
+{% else %}
+
+<button
+    type="button"
+    data-id="{{ product.id }}"
+    onclick="addToCart(this)"
+>
+    Add To Cart
+</button>
+{% endif %}
 
 </form>
 

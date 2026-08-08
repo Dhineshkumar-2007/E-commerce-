@@ -1,36 +1,46 @@
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
-<style>
-
-*{
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <style>
+    
+    *{
     margin:0;
     padding:0;
     box-sizing:border-box;
     font-family:Arial, Helvetica, sans-serif;
-}
-
-body{
+    }
+    
+    body{
     background:#f5f7fa;
-    padding:40px;
-}
-
-h1{
+    
+    }
+    
+    h1{
     text-align:center;
     margin-bottom:30px;
-    color:#333;
-}
-
-.products-container{
-
+    color:#fbfafa;
+    background: #0f0f0f;
+    height: 100px;
+    font-weight: bolder;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    }
+    
+    .products-container{
+    
     display:flex;
     flex-wrap:wrap;
     gap:20px;
     justify-content:center;
-
-}
-
-.product-card{
-
+    
+    }
+    
+    .product-card{
+    
     background:white;
     width:250px;
     border-radius:12px;
@@ -38,54 +48,58 @@ h1{
     text-align:center;
     padding:20px;
     transition:.3s;
-
-}
-
-.product-card:hover{
-
+    height: 300px;
+    
+    }
+    
+    .product-card:hover{
+    
     transform:translateY(-8px);
-
-}
-
-.product-card img{
-
-    width:150px;
-    height:150px;
+    
+    }
+    
+    .product-card img{
+    
+    width:100px;
+    height:100px;
     border-radius:15px;
     object-fit:cover;
-
-}
-
-.product-content{
-
+    
+    }
+    
+    .product-content{
+    
     margin-top:15px;
-
-}
-
-.product-content h3{
-
+    
+    }
+    
+    .product-content h3{
+    
     margin-bottom:10px;
-
-}
-
-.product-content p{
-
+    
+    }
+    
+    .product-content p{
+    
     color:#555;
     margin-bottom:10px;
-
-}
-
-.price{
-
+    font-size: auto;
+    padding: 10px;
+    height: 30px;
+    
+    }
+    
+    .price{
+    
     font-size:22px;
     color:green;
     font-weight:bold;
     margin-bottom:15px;
-
-}
-
-.btn{
-
+    
+    }
+    
+    .btn{
+    
     width:100%;
     padding:12px;
     border:none;
@@ -94,16 +108,18 @@ h1{
     color:white;
     cursor:pointer;
     font-size:16px;
-
-}
-
-.btn:hover{
-
+    
+    }
+    
+    .btn:hover{
+    
     background:#0056b3;
-
-}
-
-</style>
+    
+    }
+    
+    </style>
+</head>
+<body>
 
 <h1>All Products</h1>
 
@@ -119,7 +135,7 @@ h1{
 
         <h3>{{ product.name }}</h3>
 
-        <p>{{ product.description }}</p>
+        
 
         <div class="price">
             ₹{{ product.mrp }}
@@ -127,7 +143,10 @@ h1{
 
         <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST">
 
-            <button class="btn">
+            <button class="btn" type="button"
+    data-id="{{ product.id }}"
+    onclick="addToCart(this)"
+            >
                 Add To Cart
             </button>
 
@@ -140,3 +159,6 @@ h1{
 {% endfor %}
 
 </div>
+</body>
+<script src="static/js/home.js"></script>
+</html>
