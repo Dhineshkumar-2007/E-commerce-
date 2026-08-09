@@ -164,7 +164,7 @@ function addToCart(button) {
         if (data === "ok") {
             button.innerText = "In cart";
             button.disabled = true;
-            button.style.background = "blue";
+            button.style.background = "green";
         }
 
     })

@@ -261,6 +261,37 @@ body{
     background:#174bb0;
 }
 
+/* Unified Add To Cart button used across pages */
+.cart-btn,
+.product-card .cart-btn,
+button.cart-btn,
+a.cart-btn{
+    display:inline-block;
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:var(--primary);
+    color:white;
+    cursor:pointer;
+    font-size:15px;
+    text-align:center;
+    text-decoration:none;
+}
+
+.cart-btn:hover{
+    background:var(--primary-600);
+}
+
+.cart-btn.already-cart{
+    background:#16a34a;
+    cursor:default;
+}
+
+.cart-btn.already-cart:hover{
+    background:#16a34a;
+}
+
 /* ===========================
    VENDORS
 =========================== */

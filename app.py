@@ -72,10 +72,10 @@ def home():
 
     # Get only product IDs
     cart_ids = [item["id"] for item in cart]
-
+    carttotal=len(cart)
     return render_template(
         "home.html",
-        products=products,cart_ids=cart_ids
+        products=products,cart_ids=cart_ids,carttotal=carttotal
     )
 
 
@@ -313,12 +313,12 @@ def get_products():
     products = cursor.fetchall()
 
     cart = session.get("cart", [])
-
+    cart_total=len(cart)
     cart_ids = [item["id"] for item in cart]
 
     return render_template(
         "product.html",
-        products=products,cart_ids=cart_ids
+        products=products,cart_ids=cart_ids,cart_total=cart_total
     )
 
 
@@ -332,6 +332,7 @@ def add_to_cart(product_id):
 
     print("SESSION:", dict(session))
     print("USER ID:", session.get("id"))
+    
 
     # User must be logged in
     if "id" not in session:
@@ -462,17 +463,18 @@ def update_cart(product_id):
 def cart():
 
     cart = session.get("cart", [])
+    
 
     grand_total = 0
 
     for item in cart:
 
         grand_total += float(item["mrp"]) * int(item["quantity"])
-
+    carttotal=len(cart)
     return render_template(
         "cartpage.html",
         cart=cart,
-        total=grand_total
+        total=grand_total,carttotal=carttotal
     )
 
 
