@@ -69,9 +69,14 @@ function searchProducts() {
 
             }
 
-            document.getElementById("results").innerHTML = html;
-
-            document.getElementById("searchModal").style.display = "block";
+            const resultsEl = document.getElementById("results");
+            if (resultsEl) {
+                resultsEl.innerHTML = html;
+            }
+            const searchModal = document.getElementById("searchModal");
+            if (searchModal) {
+                searchModal.style.display = "block";
+            }
 
         })
 
@@ -105,7 +110,7 @@ window.onclick = function(event) {
 
     let modal = document.getElementById("searchModal");
 
-    if (event.target === modal) {
+if (modal && event.target === modal) {
 
         modal.style.display = "none";
 
@@ -118,39 +123,55 @@ window.onclick = function(event) {
 // SEARCH ON ENTER KEY
 // ==============================
 
-document.getElementById("searchBox")
-.addEventListener("keypress", function(event){
+const searchBoxEl = document.getElementById("searchBox");
+if (searchBoxEl) {
+    searchBoxEl.addEventListener("keypress", function(event){
 
-    if(event.key === "Enter"){
+        if(event.key === "Enter"){
 
-        event.preventDefault();
+            event.preventDefault();
 
-        searchProducts();
+            searchProducts();
 
-    }
+        }
 
-});
+    });
+}
 
 
 function addToCart(button) {
-if (user){
-    
+
     const id = button.dataset.id;
-    
+
     fetch("/add-to-cart/" + id, {
         method: "POST"
     })
     .then(response => {
-        
-        if (response.ok) {
+
+        if (response.redirected) {
+            window.location.href = response.url;
+            return null;
+        }
+
+        return response.text();
+    })
+    .then(data => {
+
+        if (data === null) {
+            return;
+        }
+
+        if (data === "ok") {
             button.innerText = "In cart";
             button.disabled = true;
-            button.style.background="blue"
+            button.style.background = "blue";
         }
-        
+
     })
     .catch(error => {
         console.log(error);
+        alert("Unable to add product.");
     });
 }
-}
+
+

@@ -2,7 +2,7 @@
 import mysql.connector
 import math,random
 from dotenv import load_dotenv
-from werkzeug import security
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from flask import (
     Flask,
@@ -19,7 +19,7 @@ app = Flask(__name__)
 
 app.secret_key = os.getenv("SECRET_KEY")
 
-app.config["SESSION_COOKIE_SECURE"] = True
+app.config["SESSION_COOKIE_SECURE"] = False
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 
@@ -127,7 +127,7 @@ def register():
     password = request.form["password"]
     role = request.form["role"]
 
-    password_hash=security.generate_password_hash(password)
+    password_hash=generate_password_hash(password)
     
     cursor = db.cursor()
 
@@ -190,7 +190,7 @@ def login():
     email = request.form["email"]
     password = request.form["password"]
 
-    cursor = db.cursor()
+    cursor = db.cursor(dictionary=True)
 
     sql = """
     SELECT
@@ -210,19 +210,21 @@ def login():
 
     user = cursor.fetchone()
 
-    if user  and security.check_password_hash(user[3],password) :
+    print("USER:", user)
 
-        session["id"] = user[0]
-        session["name"] = user[1]
-        session["role"] = user[2]
+    if user and check_password_hash(user["password_hash"], password):
 
-        if user[2] == "CUSTOMER":
+        session["id"] = user["id"]
+        session["name"] = user["name"]
+        session["role"] = user["role"]
+
+        if user["role"] == "CUSTOMER":
             return redirect(url_for("home"))
 
-        elif user[2] == "VENDOR":
+        elif user["role"] == "VENDOR":
             return redirect(url_for("vendor_dashboard"))
 
-        elif user[2] == "ADMIN":
+        elif user["role"] == "ADMIN":
             return redirect(url_for("admin_dashboard"))
 
     return render_template(
@@ -269,7 +271,7 @@ def vendor_dashboard():
     if "id" not in session : 
         return redirect(url_for("login_page"))
     elif session["role"] != "VENDOR" :
-        return "acces denied",403
+        return "Access Denied", 403
     
     return render_template("vendor_dashboard.html")
 
@@ -328,6 +330,15 @@ def get_products():
 @app.route("/add-to-cart/<int:product_id>", methods=["POST"])
 def add_to_cart(product_id):
 
+    print("SESSION:", dict(session))
+    print("USER ID:", session.get("id"))
+
+    # User must be logged in
+    if "id" not in session:
+        return redirect(url_for("login_page"))
+
+    
+
     cursor = db.cursor(dictionary=True)
 
     cursor.execute("""
@@ -370,6 +381,79 @@ def add_to_cart(product_id):
     return "ok"
 
 
+#update cart 
+@app.route("/update-cart/<int:product_id>", methods=["POST"])
+def update_cart(product_id):
+
+    # Check if user is logged in
+    if "id" not in session:
+        return jsonify({
+            "success": False,
+            "message": "Please login first"
+        }), 401
+
+    # Get JSON data from JavaScript
+    data = request.get_json()
+
+    quantity = data.get("quantity")
+
+    # Validate quantity
+    if quantity is None:
+        return jsonify({
+            "success": False,
+            "message": "Quantity is required"
+        }), 400
+
+    try:
+        quantity = int(quantity)
+    except (ValueError, TypeError):
+        return jsonify({
+            "success": False,
+            "message": "Invalid quantity"
+        }), 400
+
+    # Quantity cannot be less than 1
+    if quantity < 1:
+        return jsonify({
+            "success": False,
+            "message": "Invalid quantity"
+        }), 400
+
+    # Get cart from session
+    cart = session.get("cart", [])
+
+    # Find product
+    for item in cart:
+
+        if int(item["id"]) == product_id:
+
+            item["quantity"] = quantity
+
+            break
+
+    else:
+        return jsonify({
+            "success": False,
+            "message": "Product not found in cart"
+        }), 404
+
+    # Tell Flask session that cart changed
+    session["cart"] = cart
+    session.modified = True
+
+    # Calculate new total
+    total = sum(
+        float(item["mrp"]) * int(item["quantity"])
+        for item in cart
+    )
+
+    return jsonify({
+        "success": True,
+        "quantity": quantity,
+        "total": total
+    })
+
+
 # ===========================
 # CART PAGE
 # ===========================
@@ -404,13 +488,13 @@ def remove_from_cart(product_id):
     cart = [
         item
         for item in cart
-        if item["id"] != product_id
+        if int(item["id"]) != product_id
     ]
 
     session["cart"] = cart
+    session.modified = True
 
     return redirect(url_for("cart"))
-
 
 # ===========================
 # CLEAR CART
@@ -561,7 +645,7 @@ def my_products():
 @app.route("/vendor-orders")
 def vendor_orders():
 
-    if "user_id" not in session:
+    if "id" not in session:
         return redirect(url_for("login_page"))
 
     if session["role"] != "VENDOR":
