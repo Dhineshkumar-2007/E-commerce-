@@ -336,6 +336,34 @@ footer{
 }
 
 /* ===========================
+   ACCESSIBILITY & FOCUS STYLES
+=========================== */
+n/* Provide visible focus for keyboard users */
+:focus{
+    outline: none;
+}
+
+:focus-visible{
+    outline: 3px solid rgba(37,99,235,0.25);
+    outline-offset: 3px;
+}
+
+/* Make interactive elements clearer */
+button:focus-visible,
+input:focus-visible,
+a:focus-visible{
+    box-shadow: 0 0 0 4px rgba(37,99,235,0.08);
+}
+
+/* Improve link contrast */
+.nav-links a { color: #111827; }
+
+/* Ensure buttons have strong contrast and clear focus */
+button{
+    transition: transform .12s ease, box-shadow .12s ease;
+}
+
+/* ===========================
    RESPONSIVE
 =========================== */
 
@@ -348,18 +376,27 @@ footer{
 
     .search{
         width:100%;
-    }
-
+    }
     .hero h1{
-        font-size:36px;
+        font-size:32px;
     }
 
     .hero p{
-        font-size:16px;
+        font-size:15px;
     }
 
     .modal-content{
         width:95%;
+    }
+
+    /* Increase touch targets on small screens */
+    .product-card button,
+    .cart-btn,
+    .view-all-btn,
+    .checkout-btn,
+    .btn{
+        padding:14px 18px;
+        font-size:16px;
     }
 
 }

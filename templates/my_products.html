@@ -113,7 +113,7 @@ h1{
 
 <div class="product-card">
 
-    <img src="https://picsum.photos/200?random={{ product.id }}">
+    <img src="https://picsum.photos/200?random={{ product.id }}" alt="{{ product.name }}" loading="lazy">
 
     <div class="product-content">
 
@@ -125,14 +125,11 @@ h1{
             ₹{{ product.mrp }}
         </div>
 <button 
-
+ 
  type="button"
     data-id="{{ product.id }}"
     onclick="addToCart(this)"
->add to card</button>
-      
-
-        </form>
+>Add to Cart</button>
 
     </div>
 
