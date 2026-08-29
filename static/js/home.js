@@ -173,5 +173,24 @@ function addToCart(button) {
         alert("Unable to add product.");
     });
 }
+ // UPDATE UI
+        // =========================
+
+        function updateUI() {
+
+            quantitySpan.textContent = quantity;
+
+
+            const subtotal =
+                price * quantity;
+
+
+            subtotalElement.textContent =
+                "₹" + subtotal.toLocaleString("en-IN");
+
+
+            updateTotal();
+
+        }
 
 

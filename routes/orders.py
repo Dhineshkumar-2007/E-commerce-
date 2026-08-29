@@ -455,7 +455,8 @@ def my_orders():
     if "id" not in session:
         return redirect(url_for("auth.login_page"))
 
-
+    cart = session.get("cart", [])
+    carttotal=len(cart)
     customer_id = session["id"]
 
 
@@ -513,7 +514,7 @@ def my_orders():
 
     return render_template(
         "my_orders.html",
-        orders=orders
+        orders=orders,carttotal=carttotal
     )
 
 
