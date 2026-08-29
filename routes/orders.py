@@ -15,8 +15,7 @@ from utils.db import get_db
 
 orders_bp = Blueprint(
     "orders",
-    __name__,
-    url_prefix="/orders"
+    __name__
 )
 
 
@@ -127,7 +126,7 @@ def checkout():
 # PLACE ORDER
 # ===========================
 
-@orders_bp.route("/orders/place-order", methods=["POST"])
+@orders_bp.route("/place-order", methods=["POST"])
 def place_order():
 
     # ===========================
@@ -445,7 +444,7 @@ def place_order():
 # MY ORDERS
 # ===========================
 
-@orders_bp.route("/orders/my-orders")
+@orders_bp.route("/my-orders")
 def my_orders():
 
     # ===========================

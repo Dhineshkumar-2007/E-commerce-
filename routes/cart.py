@@ -6,8 +6,7 @@ from utils.db import get_db
 
 cart_bp = Blueprint(
     "cart",
-    __name__,
-    url_prefix="/cart"
+    __name__
 )
 
 
@@ -17,7 +16,7 @@ cart_bp = Blueprint(
 # (Stored in Session)
 # ===========================
 
-@cart_bp.route("/cart/add-to-cart/<int:product_id>", methods=["POST"])
+@cart_bp.route("/add-to-cart/<int:product_id>", methods=["POST"])
 def add_to_cart(product_id):
 
     print("SESSION:", dict(session))
@@ -26,7 +25,7 @@ def add_to_cart(product_id):
 
     # User must be logged in
     if "id" not in session:
-        return redirect(url_for("login_page"))
+        return redirect(url_for("auth.login_page"))
 
     
     db = get_db()
@@ -173,7 +172,7 @@ def cart():
 # REMOVE FROM CART
 # ===========================
 
-@cart_bp.route("/cart/remove/<int:product_id>")
+@cart_bp.route("/remove/<int:product_id>")
 def remove_from_cart(product_id):
 
     cart = session.get("cart", [])
@@ -193,9 +192,9 @@ def remove_from_cart(product_id):
 # CLEAR CART
 # ===========================
 
-@cart_bp.route("/cart/clear-cart")
+@cart_bp.route("/clear-cart")
 def clear_cart():
 
     session.pop("cart", None)
 
-    return redirect(url_for("cart"))
+    return redirect(url_for("cart.cart"))

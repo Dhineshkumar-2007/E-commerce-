@@ -26,7 +26,7 @@ app.register_blueprint(auth_bp,url_prefix="/auth")
 app.register_blueprint(product_bp,url_prefix="/products")
 app.register_blueprint(cart_bp,url_prefix="/cart")
 app.register_blueprint(orders_bp,url_prefix="/orders")
-
+print(app.url_map)
 
 
 
