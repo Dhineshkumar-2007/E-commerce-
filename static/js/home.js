@@ -153,7 +153,7 @@ function addToCart(button) {
             return null;
         }
 
-        return response.text();
+        
     })
     .then(data => {
 

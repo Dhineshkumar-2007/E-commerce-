@@ -127,7 +127,7 @@ def checkout():
 # PLACE ORDER
 # ===========================
 
-@orders_bp.route("/place-order", methods=["POST"])
+@orders_bp.route("/orders/place-order", methods=["POST"])
 def place_order():
 
     # ===========================
@@ -445,7 +445,7 @@ def place_order():
 # MY ORDERS
 # ===========================
 
-@orders_bp.route("/my-orders")
+@orders_bp.route("/orders/my-orders")
 def my_orders():
 
     # ===========================
