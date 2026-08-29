@@ -23,12 +23,12 @@ class Config:
     # ===========================
 
     
-    DB_HOST = os.getenv("CLOUD_DB_HOST")
-    DB_PORT = os.getenv("CLOUD_DB_PORT")
-    DB_USER = os.getenv("CLOUD_DB_USER")
-    DB_PASSWORD = os.getenv("CLOUD_DB_PASSWORD")
-    DB_NAME = os.getenv("CLOUD_DB_NAME")
-    DB_SSL_CA = os.getenv("CLOUD_DB_SSL_CA")
+    DB_HOST = os.getenv("DB_HOST")
+    DB_PORT = os.getenv("DB_PORT")
+    DB_USER = os.getenv("DB_USER")
+    DB_PASSWORD = os.getenv("DB_PASSWORD")
+    DB_NAME = os.getenv("DB_NAME")
+    DB_SSL_CA = os.getenv("DB_SSL_CA")
     
 
     SESSION_COOKIE_SECURE = False
