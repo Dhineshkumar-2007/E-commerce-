@@ -24,7 +24,7 @@ class Config:
 
     
     DB_HOST = os.getenv("CLOUD_DB_HOST")
-    DB_PORT = int(os.getenv("CLOUD_DB_PORT"))
+    DB_PORT = os.getenv("CLOUD_DB_PORT")
     DB_USER = os.getenv("CLOUD_DB_USER")
     DB_PASSWORD = os.getenv("CLOUD_DB_PASSWORD")
     DB_NAME = os.getenv("CLOUD_DB_NAME")
