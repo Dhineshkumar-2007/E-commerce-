@@ -141,41 +141,46 @@ if (searchBoxEl) {
 
 function addToCart(button) {
 
-    const id = button.dataset.id;
+        const id = button.dataset.id;
 
-    fetch("/cart/add-to-cart/" + id, {
-        method: "POST"
-    })
-    .then(response => {
+        fetch("/cart/add-to-cart/" + id, {
+            method: "POST"
+        })
+        .then(response => {
 
-        if (response.redirected) {
-            window.location.href = response.url;
-            return null;
-        }
+            if (response.redirected) {
+                window.location.href = response.url;
+                return null;
+            }
 
-        
-    })
-    .then(data => {
+            return response.text();
+        })
+        .then(data => {
 
-        if (data === null) {
-            return;
-        }
+            if (data === null) {
+                return;
+            }
 
-        if (data === "ok") {
-            button.innerText = "✓ Added to Cart";
-            button.disabled = true;
-            button.style.background = "green";
-            updateUI();
-        }
+            if (data === "ok") {
+                button.innerText = "✓ Added to Cart";
+                button.disabled = true;
+                button.style.background = "green";
+            }
 
-    })
-    .catch(error => {
-        console.log(error);
-        alert("Unable to add product.");
+        })
+        .catch(error => {
+            console.log(error);
+            alert("Unable to add product.");
+        });
     }
-    
-);
-}
+
+    document
+        .querySelectorAll(".cart-btn[data-id]")
+        .forEach(button => {
+            button.addEventListener("click", () => addToCart(button));
+        });
+
+
  // UPDATE UI
         // =========================
 
