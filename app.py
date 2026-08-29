@@ -42,7 +42,7 @@ def home():
     cursor.execute("""
         SELECT id, name, description, mrp
         FROM products
-        LIMIT 4
+        LIMIT 8
     """)
 
     products = cursor.fetchall()
