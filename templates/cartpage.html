@@ -400,15 +400,15 @@
 
         <a href="/products">Products</a>
 
-        <a href="/cart">🛒 Cart<span style="color: white;background-color: rgb(30, 31, 30);width: 35px;margin:5px;height: 10px;border-radius: 50px;padding: 8px;">{{carttotal}}</span></a>
+        <a href="/cart">🛒 Cart<span style="color: rgb(0, 0, 0);background-color: rgb(255, 255, 255);width: 35px;margin:5px;height: 10px;border-radius: 50px;padding: 8px;">{{carttotal}}</span></a>
 
         {% if session.get("id") %}
 
-            <a href="/logout">Logout</a>
+            <a href="/auth/logout">Logout</a>
 
         {% else %}
 
-            <a href="/login">Login</a>
+            <a href="/auth/login">Login</a>
 
         {% endif %}
 
@@ -502,12 +502,12 @@
                 <div class="item-right">
 
                     <div class="subtotal">
-                        ₹{{ item.mrp * item.quantity }}
+                        ₹{{item.subtotal}}
                     </div>
 
                     <a
                         class="remove"
-                        href="/remove/{{ item.id }}"
+                        href="/cart/remove/{{ item.id }}"
                     >
                         Remove
                     </a>
@@ -533,7 +533,7 @@
                 <span>Subtotal</span>
 
                 <strong>
-                    ₹{{ total }}
+                    ₹{{ grand_total }}
                 </strong>
 
             </div>
@@ -575,7 +575,7 @@
             </div>
 
 
-            <a href="/checkout" style="text-decoration:none;">
+            <a href="/orders" style="text-decoration:none;">
 
                 <button class="checkout-btn">
                     Proceed to Checkout →
@@ -673,7 +673,7 @@
             try {
 
                 const response = await fetch(
-                    `/update-cart/${productId}`,
+                    `/cart/update-cart/${productId}`,
                     {
                         method: "POST",
 

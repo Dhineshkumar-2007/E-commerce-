@@ -112,7 +112,8 @@ body{
     color:white;
     cursor: pointer;
    transition: transform .18s ease, background-color .18s ease;
-} .view-all-btn:hover{
+}
+ .view-all-btn:hover{
     transform: scale(1.03);
     background-color: var(--primary-600);
 }
@@ -369,7 +370,8 @@ footer{
 /* ===========================
    ACCESSIBILITY & FOCUS STYLES
 =========================== */
-n/* Provide visible focus for keyboard users */
+
+n/* Provide visible focus for keyboard users */
 :focus{
     outline: none;
 }
@@ -407,7 +409,8 @@ button{
 
     .search{
         width:100%;
-    }
+    }
+
     .hero h1{
         font-size:32px;
     }
@@ -430,4 +433,16 @@ button{
         font-size:16px;
     }
 
+}
+.my-orders-btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    background: #333;
+    color: white;
+    cursor: pointer;
+}
+
+.my-orders-btn:hover {
+    background: #555;
 }

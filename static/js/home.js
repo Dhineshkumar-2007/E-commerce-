@@ -143,7 +143,7 @@ function addToCart(button) {
 
     const id = button.dataset.id;
 
-    fetch("/add-to-cart/" + id, {
+    fetch("/cart/add-to-cart/" + id, {
         method: "POST"
     })
     .then(response => {
@@ -162,7 +162,7 @@ function addToCart(button) {
         }
 
         if (data === "ok") {
-            button.innerText = "In cart";
+            button.innerText = "✓ Added to Cart";
             button.disabled = true;
             button.style.background = "green";
         }

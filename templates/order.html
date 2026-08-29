@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Checkout</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .title {
+            font-size: 28px;
+            margin-bottom: 25px;
+        }
+
+        .checkout {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* USER */
+
+        .user-details {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .user-details p {
+            margin: 7px 0;
+        }
+
+        /* ADDRESS */
+
+        .address-card {
+            border: 2px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        .address-card:hover {
+            border-color: #ff6b00;
+        }
+
+        .address-card.selected {
+            border-color: #28a745;
+            background: #f1fff4;
+        }
+
+        .address-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .address-header input {
+            width: auto;
+        }
+
+        .address-text {
+            line-height: 1.6;
+            color: #555;
+            margin-left: 25px;
+        }
+
+        .no-address {
+            color: #777;
+            margin-bottom: 15px;
+        }
+
+        /* ADD ADDRESS */
+
+        .new-address {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        .new-address.show {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .add-address-btn {
+            border: none;
+            background: none;
+            color: #ff6b00;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .save-address {
+            padding: 11px 18px;
+            border: none;
+            border-radius: 6px;
+            background: #333;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* PAYMENT */
+
+        .payment-option {
+            border: 2px solid #28a745;
+            background: #f1fff4;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .payment-option label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0;
+        }
+
+        .payment-option input {
+            width: auto;
+        }
+
+        .payment-description {
+            margin-left: 28px;
+            margin-top: 5px;
+            color: #666;
+        }
+
+        /* ORDER */
+
+        .product {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .product-info strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .quantity {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 20px;
+            font-weight: bold;
+            padding-top: 20px;
+        }
+
+        .place-order {
+            width: 100%;
+            margin-top: 25px;
+            padding: 15px;
+            border: none;
+            border-radius: 7px;
+            background: #ff6b00;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .place-order:hover {
+            background: #e85d00;
+        }
+
+        @media(max-width: 750px) {
+
+            .checkout {
+                grid-template-columns: 1fr;
+            }
+
+            .row {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+    <h1 class="title">
+        Checkout
+    </h1>
+
+
+    <!-- IMPORTANT:
+         This form sends everything to /place-order
+    -->
+
+    <form
+        action="{{ url_for('orders.place_order') }}"
+        method="POST"
+        id="orderForm"
+    >
+
+        <!--
+            Tells Flask whether the user selected
+            a saved address or entered a new address.
+        -->
+
+        <input
+            type="hidden"
+            name="address_type"
+            id="addressType"
+            value="{% if addresses %}saved{% else %}new{% endif %}"
+        >
+
+
+        <div class="checkout">
+
+
+            <!-- ================= LEFT ================= -->
+
+            <div>
+
+
+                <!-- DELIVERY -->
+
+                <div class="card">
+
+                    <h2>
+                        Delivery Details
+                    </h2>
+
+
+                    <!-- USER DETAILS -->
+
+                    <div class="user-details">
+
+                        <p>
+                            <strong>Name:</strong>
+                            {{ user.name }}
+                        </p>
+
+                        <p>
+                            <strong>Phone:</strong>
+                            {{ user.phone }}
+                        </p>
+
+                    </div>
+
+
+                    <h3 style="margin-bottom: 15px;">
+                        Delivery Address
+                    </h3>
+
+
+                    <!-- ================= SAVED ADDRESSES ================= -->
+
+                    {% if addresses %}
+
+                        {% for address in addresses %}
+
+                        <div
+                            class="address-card
+                            {% if address.is_default %}selected{% endif %}"
+                            onclick="selectAddress(this)"
+                        >
+
+                            <div class="address-header">
+
+                                <input
+                                    type="radio"
+                                    name="address_id"
+                                    value="{{ address.id }}"
+
+                                    {% if address.is_default %}
+                                        checked
+                                    {% endif %}
+
+                                    onclick="event.stopPropagation(); setSavedAddress()"
+                                >
+
+                                <strong>
+
+                                    {% if address.is_default %}
+                                        Default Address
+                                    {% else %}
+                                        Saved Address
+                                    {% endif %}
+
+                                </strong>
+
+                            </div>
+
+
+                            <div class="address-text">
+
+                                {{ address.house_no }}<br>
+
+                                {{ address.street }}<br>
+
+                                {{ address.city }},
+                                {{ address.state }} -
+                                {{ address.pincode }}
+
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <p class="no-address">
+                            No saved addresses.
+                        </p>
+
+                    {% endif %}
+
+
+                    <!-- ADD NEW ADDRESS -->
+
+                    <button
+                        type="button"
+                        class="add-address-btn"
+                        onclick="showNewAddress()"
+                    >
+
+                        + Add New Address
+
+                    </button>
+
+
+                    <!-- ================= NEW ADDRESS ================= -->
+
+                    <div
+                        class="new-address"
+                        id="newAddress"
+                    >
+
+                        <h3 style="margin-bottom: 15px;">
+                            Add New Address
+                        </h3>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                House / Door No.
+                            </label>
+
+                            <input
+                                type="text"
+                                name="house_no"
+                                placeholder="Example: 12/4"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Street / Area
+                            </label>
+
+                            <input
+                                type="text"
+                                name="street"
+                                placeholder="Street or Area"
+                            >
+
+                        </div>
+
+
+                        <div class="row">
+
+                            <div class="form-group">
+
+                                <label>
+                                    City
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="city"
+                                    placeholder="City"
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label>
+                                    State
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="state"
+                                    placeholder="State"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Pincode
+                            </label>
+
+                            <input
+                                type="text"
+                                name="pincode"
+                                maxlength="6"
+                                placeholder="6-digit pincode"
+                            >
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="save-address"
+                            onclick="useNewAddress()"
+                        >
+
+                            Use This Address
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================= PAYMENT ================= -->
+
+                <div class="card">
+
+                    <h2>
+                        Payment Method
+                    </h2>
+
+
+                    <div class="payment-option">
+
+                        <label>
+
+                            <input
+                                type="radio"
+                                name="payment_method"
+                                value="COD"
+                                checked
+                            >
+
+                            <strong>
+                                Cash on Delivery
+                            </strong>
+
+                        </label>
+
+
+                        <p class="payment-description">
+
+                            Pay when your order arrives.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ================= RIGHT ================= -->
+
+            <div>
+
+                <div class="card">
+
+                    <h2>
+                        Order Summary
+                    </h2>
+
+
+                    {% for item in cart %}
+
+                    <div class="product">
+
+                        <div class="product-info">
+
+                            <strong>
+                                {{ item.name }}
+                            </strong>
+
+                            <span class="quantity">
+                                Qty: {{ item.quantity }}
+                            </span>
+
+                        </div>
+
+
+                        <strong>
+                            ₹{{ "%.2f"|format(
+                                item.mrp|float * item.quantity|int
+                            ) }}
+                        </strong>
+
+                    </div>
+
+                    {% endfor %}
+
+
+                    <div class="total">
+
+                        <span>
+                            Total
+                        </span>
+
+                        <span>
+                            ₹{{ "%.2f"|format(grand_total) }}
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="place-order"
+                    >
+
+                        Place Order
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<script>
+
+
+/* =================================
+   SELECT SAVED ADDRESS
+================================= */
+
+function selectAddress(element) {
+
+    // Set address type to saved
+    document.getElementById("addressType").value = "saved";
+
+
+    // Hide new address form
+    document
+        .getElementById("newAddress")
+        .classList.remove("show");
+
+
+    // Remove selected style
+    document
+        .querySelectorAll(".address-card")
+        .forEach(card => {
+
+            card.classList.remove("selected");
+
+        });
+
+
+    // Add selected style
+    element.classList.add("selected");
+
+
+    // Select radio button
+    const radio = element.querySelector(
+        'input[type="radio"]'
+    );
+
+    radio.checked = true;
+}
+
+
+/* =================================
+   RADIO BUTTON DIRECT CLICK
+================================= */
+
+function setSavedAddress() {
+
+    document.getElementById("addressType").value = "saved";
+
+
+    document
+        .getElementById("newAddress")
+        .classList.remove("show");
+
+
+    document
+        .querySelectorAll(".address-card")
+        .forEach(card => {
+
+            card.classList.remove("selected");
+
+        });
+
+
+    const selectedRadio =
+        document.querySelector(
+            'input[name="address_id"]:checked'
+        );
+
+
+    if (selectedRadio) {
+
+        selectedRadio
+            .closest(".address-card")
+            .classList.add("selected");
+
+    }
+}
+
+
+/* =================================
+   SHOW NEW ADDRESS
+================================= */
+
+function showNewAddress() {
+
+    document.getElementById("addressType").value = "new";
+
+
+    document
+        .getElementById("newAddress")
+        .classList.add("show");
+
+
+    // Unselect saved addresses
+
+    document
+        .querySelectorAll(".address-card")
+        .forEach(card => {
+
+            card.classList.remove("selected");
+
+            const radio = card.querySelector(
+                'input[type="radio"]'
+            );
+
+            radio.checked = false;
+
+        });
+}
+
+
+/* =================================
+   USE NEW ADDRESS
+================================= */
+
+function useNewAddress() {
+
+    const house =
+        document.querySelector('[name="house_no"]').value.trim();
+
+    const street =
+        document.querySelector('[name="street"]').value.trim();
+
+    const city =
+        document.querySelector('[name="city"]').value.trim();
+
+    const state =
+        document.querySelector('[name="state"]').value.trim();
+
+    const pincode =
+        document.querySelector('[name="pincode"]').value.trim();
+
+
+    // Validate
+
+    if (
+        !house ||
+        !street ||
+        !city ||
+        !state ||
+        !pincode
+    ) {
+
+        alert("Please fill all address fields.");
+
+        return;
+    }
+
+
+    // Validate pincode
+
+    if (!/^\d{6}$/.test(pincode)) {
+
+        alert("Please enter a valid 6-digit pincode.");
+
+        return;
+    }
+
+
+    // Tell Flask this is a NEW address
+
+    document.getElementById("addressType").value = "new";
+
+
+    // Unselect saved addresses
+
+    document
+        .querySelectorAll('input[name="address_id"]')
+        .forEach(input => {
+
+            input.checked = false;
+
+        });
+
+
+    document
+        .querySelectorAll(".address-card")
+        .forEach(card => {
+
+            card.classList.remove("selected");
+
+        });
+
+
+    alert("New address selected.");
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>

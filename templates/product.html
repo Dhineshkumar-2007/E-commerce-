@@ -356,7 +356,7 @@ body {
 </style>
 
 
-</style>
+
 <div class="products-header">
 
     <div class="header-actions">
@@ -414,6 +414,11 @@ body {
 
             <!-- CART BUTTON -->
 
+            <form
+                action="/cart/add-to-cart/{{ product.id }}"
+                    method="POST"
+>
+
             {% if product.id in cart_ids %}
 
                 <button
@@ -421,7 +426,7 @@ body {
                     type="button"
                     disabled
                 >
-                    ✓ Already in Cart
+                    ✓ Added to Cart
                 </button>
 
             {% else %}
@@ -430,13 +435,12 @@ body {
                     class="cart-btn"
                     type="button"
                     data-id="{{ product.id }}"
-                    onclick="addToCart(this)"
                 >
                     🛒 Add To Cart
                 </button>
 
             {% endif %}
-
+            </form>
         </div>
 
     </div>
@@ -490,7 +494,7 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
 
                 const response = await fetch(
-                    `/update-cart/${productId}`,
+                    `/cart/update-cart/${productId}`,
                     {
                         method: "POST",
 
@@ -631,76 +635,51 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
+
+
+
+    function addToCart(button) {
+
+        const id = button.dataset.id;
+
+        fetch("/cart/add-to-cart/" + id, {
+            method: "POST"
+        })
+        .then(response => {
+
+            if (response.redirected) {
+                window.location.href = response.url;
+                return null;
+            }
+
+            return response.text();
+        })
+        .then(data => {
+
+            if (data === null) {
+                return;
+            }
+
+            if (data === "ok") {
+                button.innerText = "✓ Added to Cart";
+                button.disabled = true;
+                button.style.background = "green";
+            }
+
+        })
+        .catch(error => {
+            console.log(error);
+            alert("Unable to add product.");
+        });
+    }
+
+    document
+        .querySelectorAll(".cart-btn[data-id]")
+        .forEach(button => {
+            button.addEventListener("click", () => addToCart(button));
+        });
 });
 
-async function addToCart(button) {
-
-    const productId = button && button.dataset && button.dataset.id;
-
-    if (!productId) {
-        console.error('No product id found on button');
-        return;
-    }
-
-    // disable to prevent double clicks
-    button.disabled = true;
-
-    try {
-        const response = await fetch(`/add-to-cart/${productId}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ quantity: 1 })
-        });
-
-        const contentType = response.headers.get('content-type') || '';
-        let data = null;
-
-        if (contentType.includes('application/json')) {
-            try {
-                data = await response.json();
-            } catch (e) {
-                console.warn('Failed to parse JSON response', e);
-            }
-        } else {
-            // Try to read text and attempt to parse JSON if possible
-            try {
-                const text = await response.text();
-                try {
-                    data = JSON.parse(text);
-                } catch (e) {
-                    // not JSON - ignore
-                    data = null;
-                }
-            } catch (e) {
-                console.warn('Failed to read non-JSON response', e);
-            }
-        }
-
-        console.log('Add to cart response:', response.status, data);
-
-        // Success cases:
-        // 1) server returned JSON with { success: true }
-        // 2) server returned a successful HTTP status (2xx) but no JSON body (common when server redirects)
-        if ((data && data.success) || (response.ok && (!data || typeof data.success === 'undefined'))) {
-            button.classList.add('already-cart');
-            button.innerHTML = '✓ Already in Cart';
-            button.disabled = true;
-            return;
-        }
-
-        // Otherwise show error message
-        const message = data && data.message ? data.message : `Could not add to cart (status ${response.status})`;
-        alert(message);
-        button.disabled = false;
-
-    } catch (err) {
-        console.error('Add to cart error:', err);
-        alert('Error adding to cart. Please try again.');
-        button.disabled = false;
-    }
-
-}
-
 </script>
+</body>
+</html>

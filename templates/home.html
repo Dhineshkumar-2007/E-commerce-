@@ -1,32 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ShopHub</title>
+    <title>ShopHub</title>
 
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/design-system.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/design-system.css') }}">
 
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
 
 </head>
 
+
 <body>
+
 
 <!-- ================= NAVBAR ================= -->
 
 <nav class="navbar">
 
+
+    <!-- LOGO -->
+
     <div class="logo">
+
         <h2>🛍️ ShopHub</h2>
+
     </div>
+
+
+    <!-- SEARCH -->
 
     <div class="search">
 
@@ -45,50 +62,153 @@
 
     </div>
 
+
+    <!-- NAV LINKS -->
+
     <div class="nav-links">
 
-        <a href="/">Home</a>
 
-        <a href="/products">Products</a>
+        <!-- HOME -->
 
-        <a href="/cart">🛒 Cart <span style="color: white;background-color: rgb(30, 31, 30);width: 35px;margin:5px;height: 10px;border-radius: 50px;padding: 8px;">{{carttotal}}</span></a>
-        {% if session.get("id") %}
-          <a href="/logout">
-            <button class="logout">
-                Logout
-            </button>
+        <a href="{{ url_for('home') }}">
+            Home
         </a>
+
+
+        <!-- PRODUCTS -->
+
+        <a href="{{ url_for('products.get_products') }}">
+            Products
+        </a>
+
+
+        <!-- CART -->
+
+        <a href="{{ url_for('cart.cart') }}">
+
+            🛒 Cart
+
+            <span
+                style="
+                    color: white;
+                    background-color: rgb(30, 31, 30);
+                    width: 35px;
+                    margin: 5px;
+                    height: 10px;
+                    border-radius: 50px;
+                    padding: 8px;
+                "
+            >
+                {{ carttotal }}
+            </span>
+
+        </a>
+
+
+        <!-- ========================= -->
+        <!-- LOGGED IN -->
+        <!-- ========================= -->
+
+        {% if session.get("id") %}
+
+
+            <!-- MY ORDERS -->
+
+            <a href="{{ url_for('orders.my_orders') }}">
+
+                <button class="my-orders-btn">
+
+                    📦 My Orders
+
+                </button>
+
+            </a>
+
+
+            <!-- LOGOUT -->
+
+            <a href="{{ url_for('auth.logout') }}">
+
+                <button class="logout">
+
+                    Logout
+
+                </button>
+
+            </a>
+
+
         {% else %}
 
-        <a href="/login">
-            <button class="login-btn">
-                Login
-            </button>
-        </a>
 
-        <a href="/register">
-            <button class="register-btn">
-                Register
-            </button>
-        </a>
+            <!-- ========================= -->
+            <!-- NOT LOGGED IN -->
+            <!-- ========================= -->
+
+
+            <!-- LOGIN -->
+
+            <a href="{{ url_for('auth.login_page') }}">
+
+                <button class="login-btn">
+
+                    Login
+
+                </button>
+
+            </a>
+
+
+            <!-- REGISTER -->
+
+            <a href="{{ url_for('auth.register_page') }}">
+
+                <button class="register-btn">
+
+                    Register
+
+                </button>
+
+            </a>
+
+
         {% endif %}
+
 
     </div>
 
 </nav>
 
 
+
 <!-- ================= HERO ================= -->
 
 <section class="hero">
 
+
     <div class="hero-content">
+
 
         <h1>
 
-            Welcome <span>{{session.name}}</span>
+            Welcome
+
+            <span>
+
+                {% if session.get("name") %}
+
+                    {{ session.get("name") }}
+
+                {% else %}
+
+                    Guest
+
+                {% endif %}
+
+            </span>
 
         </h1>
+
 
         <p>
 
@@ -96,7 +216,8 @@
 
         </p>
 
-        <a href="/products">
+
+        <a href="{{ url_for('products.my_products') }}">
 
             <button>
 
@@ -106,185 +227,303 @@
 
         </a>
 
+
     </div>
 
+
 </section>
+
 
 
 <!-- ================= CATEGORIES ================= -->
 
 <section class="categories">
 
+
     <h2>Categories</h2>
+
 
     <div class="category-container">
 
+
         <div class="card">
+
             📱 Electronics
+
         </div>
 
+
         <div class="card">
+
             👕 Fashion
+
         </div>
 
+
         <div class="card">
+
             💻 Computers
+
         </div>
 
+
         <div class="card">
+
             🛋 Furniture
+
         </div>
 
+
         <div class="card">
+
             📚 Books
+
         </div>
 
+
         <div class="card">
+
             🍎 Grocery
+
         </div>
+
 
     </div>
 
+
 </section>
+
 
 
 <!-- ================= FEATURED PRODUCTS ================= -->
 
 <section class="products">
 
-<h2>Featured Products</h2>
 
-<a href="/products">
-
-<button class="view-all-btn">
-
-View All Products >>
-
-</button>
-
-</a>
+    <h2>Featured Products</h2>
 
 
-<div class="product-container">
+    <a href="{{ url_for('products.my_products') }}">
 
-{% for product in products %}
+        <button class="view-all-btn">
 
-<div class="product-card">
+            View All Products >>
 
-<img
-src="https://picsum.photos/seed/{{ product.id }}/300/300"
-alt="{{ product.name }}"
-loading="lazy"
->
+        </button>
 
-<h3>
+    </a>
 
-{{ product.name }}
 
-</h3>
 
-<p>
+    <div class="product-container">
 
-{{ product.description }}
 
-</p>
+        {% for product in products %}
 
-<p>
 
-₹{{ product.mrp }}
+        <div class="product-card">
 
-</p>
 
-<form
-action="/add-to-cart/{{ product.id }}"
-method="POST"
->
-{% if product.id in cart_ids %}
+            <!-- PRODUCT IMAGE -->
 
-<button type="submit" disabled class="cart-btn already-cart">
+            <img
+                src="https://picsum.photos/seed/{{ product.id }}/300/300"
+                alt="{{ product.name }}"
+                loading="lazy"
+            >
 
-In Cart 
 
-</button>
-{% else %}
+            <!-- PRODUCT NAME -->
 
-<button
-    type="button"
-    class="cart-btn"
-    data-id="{{ product.id }}"
-    onclick="addToCart(this)"
->
-    Add To Cart
-</button>
-{% endif %}
+            <h3>
 
-</form>
+                {{ product.name }}
 
-</div>
+            </h3>
 
-{% endfor %}
 
-</div>
+            <!-- DESCRIPTION -->
+
+            <p>
+
+                {{ product.description }}
+
+            </p>
+
+
+            <!-- PRICE -->
+
+            <p>
+
+                ₹{{ product.mrp }}
+
+            </p>
+
+
+
+            <!-- ========================= -->
+            <!-- ADD TO CART -->
+            <!-- ========================= -->
+
+
+            {% if product.id in cart_ids %}
+
+
+                <button
+                    type="button"
+                    disabled
+                    class="cart-btn already-cart"
+                >
+
+                    ✓ Added to Cart
+
+                </button>
+
+
+            {% else %}
+
+
+                <button
+                    type="button"
+                    class="cart-btn"
+                    data-id="{{ product.id }}"
+                    onclick="addToCart(this)"
+                >
+
+                    Add To Cart
+
+                </button>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+        {% endfor %}
+
+
+    </div>
+
 
 </section>
+
+
 
 <!-- ================= TOP VENDORS ================= -->
 
 <section class="vendors">
 
+
     <h2>Top Vendors</h2>
+
 
     <div class="vendor-container">
 
-        <div class="vendor-card">
-            <h3>Tech World</h3>
-            <p>⭐⭐⭐⭐⭐</p>
-            <p>500+ Products</p>
-        </div>
 
         <div class="vendor-card">
-            <h3>Fashion Hub</h3>
-            <p>⭐⭐⭐⭐☆</p>
-            <p>300+ Products</p>
+
+            <h3>
+                Tech World
+            </h3>
+
+            <p>
+                ⭐⭐⭐⭐⭐
+            </p>
+
+            <p>
+                500+ Products
+            </p>
+
         </div>
 
+
         <div class="vendor-card">
-            <h3>Home Decor</h3>
-            <p>⭐⭐⭐⭐⭐</p>
-            <p>250+ Products</p>
+
+            <h3>
+                Fashion Hub
+            </h3>
+
+            <p>
+                ⭐⭐⭐⭐☆
+            </p>
+
+            <p>
+                300+ Products
+            </p>
+
         </div>
+
+
+        <div class="vendor-card">
+
+            <h3>
+                Home Decor
+            </h3>
+
+            <p>
+                ⭐⭐⭐⭐⭐
+            </p>
+
+            <p>
+                250+ Products
+            </p>
+
+        </div>
+
 
     </div>
 
+
 </section>
+
 
 
 <!-- ================= SEARCH RESULTS MODAL ================= -->
 
 <div id="searchModal" class="modal">
 
+
     <div class="modal-content">
 
-        <span class="close" onclick="closeModal()">
+
+        <span
+            class="close"
+            onclick="closeModal()"
+        >
+
             &times;
+
         </span>
 
-        <h2>Search Results</h2>
+
+        <h2>
+            Search Results
+        </h2>
+
 
         <div id="results">
 
         </div>
 
+
     </div>
 
+
 </div>
+
 
 
 <!-- ================= FOOTER ================= -->
 
 <footer>
 
-    <h3>🛍️ ShopHub</h3>
+
+    <h3>
+        🛍️ ShopHub
+    </h3>
+
 
     <p>
 
@@ -292,7 +531,9 @@ In Cart
 
     </p>
 
+
     <br>
+
 
     <p>
 
@@ -300,12 +541,15 @@ In Cart
 
     </p>
 
+
 </footer>
+
 
 
 <!-- ================= JAVASCRIPT ================= -->
 
 <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+
 
 </body>
 
