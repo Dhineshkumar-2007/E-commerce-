@@ -48,7 +48,7 @@ function searchProducts() {
                         </h2>
 
                         <form
-                        action="/add-to-cart/${product.id}"
+                        action="/cart/add-to-cart/${product.id}"
                         method="POST">
 
                             <button
