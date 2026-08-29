@@ -165,13 +165,16 @@ function addToCart(button) {
             button.innerText = "✓ Added to Cart";
             button.disabled = true;
             button.style.background = "green";
+            updateUI();
         }
 
     })
     .catch(error => {
         console.log(error);
         alert("Unable to add product.");
-    });
+    }
+    
+);
 }
  // UPDATE UI
         // =========================
