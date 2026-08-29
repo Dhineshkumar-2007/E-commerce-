@@ -415,7 +415,7 @@ body {
             <!-- CART BUTTON -->
 
             <form
-                action="/products/add-to-cart/{{ product.id }}"
+                action="/cart/add-to-cart/{{ product.id }}"
                     method="POST"
 >
 
@@ -642,7 +642,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const id = button.dataset.id;
 
-        fetch("/products/add-to-cart/" + id, {
+        fetch("/cart/add-to-cart/" + id, {
             method: "POST"
         })
         .then(response => {

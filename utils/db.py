@@ -15,7 +15,7 @@ def get_db():
 # ===========================
 # CLOUD DATABASE
 # ===========================
-"""
+
 def get_cloud_db():
     return mysql.connector.connect(
         host=os.getenv("DB_HOST"),
@@ -25,7 +25,7 @@ def get_cloud_db():
         database=os.getenv("DB_NAME"),
         ssl_ca=os.getenv("DB_SSL_CA")
     )
-"""
+
 
 
 # ===========================

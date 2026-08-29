@@ -71,7 +71,7 @@ def add_to_cart(product_id):
     return "ok"
 
 #update cart 
-@cart_bp.route("/cart/update-cart/<int:product_id>", methods=["POST"])
+@cart_bp.route("/update-cart/<int:product_id>", methods=["POST"])
 def update_cart(product_id):
 
     # Check if user is logged in
