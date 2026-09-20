@@ -1,4 +1,5 @@
-﻿from flask import (
+﻿
+from flask import (
     Flask,
     render_template,
     request,
@@ -12,7 +13,6 @@ from routes.auth import auth_bp
 from routes.products import product_bp
 from routes.cart import cart_bp
 from routes.orders import orders_bp
-
 
 from utils.db import get_db
 from config import Config
@@ -47,18 +47,31 @@ def home():
 
     products = cursor.fetchall()
 
-     # Get cart from session
+    # Get cart from session
     cart = session.get("cart", [])
 
     # Get only product IDs
     cart_ids = [item["id"] for item in cart]
-    carttotal=len(cart)
+    carttotal = len(cart)
+
+    if session.get('role') == 'CUSTOMER':
+        return render_template(
+            "home.html",
+            products=products,
+            cart_ids=cart_ids,
+            carttotal=str(carttotal)
+        )
+
+    if session.get('role') == 'VENDOR':
+        return render_template("vendor_dashboard.html")
+
+    # No role / not logged in → show home page
     return render_template(
         "home.html",
-        products=products,cart_ids=cart_ids,carttotal=carttotal
+        products=products,
+        cart_ids=cart_ids,
+        carttotal=str(carttotal)
     )
-
-
 
 
 
@@ -93,12 +106,14 @@ def search_product():
 @app.route("/vendor")
 def vendor_dashboard():
 
-    if "id" not in session : 
+    if "id" not in session:
         return redirect(url_for("login_page"))
-    elif session["role"] != "VENDOR" :
+
+    elif session["role"] != "VENDOR":
         return "Access Denied", 403
-    
+
     return render_template("vendor_dashboard.html")
+
 
 
 # ===========================
@@ -121,6 +136,7 @@ def admin_dashboard():
 # ===========================
 # RUN APP
 # ===========================
+
 """
 if __name__ == "__main__":
 
@@ -132,7 +148,6 @@ if __name__ == "__main__":
         debug=True
     )
 """
-
 
 
 if __name__ == "__main__":

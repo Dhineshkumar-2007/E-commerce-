@@ -137,54 +137,52 @@ if (searchBoxEl) {
 
     });
 }
-
+const carttotalBtn = document.getElementById("cart_total-btn");
 
 function addToCart(button) {
 
-        const id = button.dataset.id;
+    const id = button.dataset.id;
 
-        fetch("/cart/add-to-cart/" + id, {
-            method: "POST"
-        })
-        .then(response => {
+    fetch("/cart/add-to-cart/" + id, {
+        method: "POST"
+    })
+    .then(response => {
 
-            if (response.redirected) {
-                window.location.href = response.url;
-                return null;
-            }
+        if (response.redirected) {
+            window.location.href = response.url;
+            return null;
+        }
 
-            return response.text();
-        })
-        .then(data => {
+        return response.json();
+    })
+    .then(data => {
 
-            if (data === null) {
-                return;
-            }
+        if (data === null) {
+            return;
+        }
 
-            if (data === "ok") {
-                button.innerText = "✓ Added to Cart";
-                button.disabled = true;
-                button.style.background = "green";
-            }
+        if (data.status === "ok") {
 
-        })
-        .catch(error => {
-            console.log(error);
-            alert("Unable to add product.");
-        });
-    }
+            button.innerText = "✓ Added to Cart";
+            button.disabled = true;
+            button.style.background = "green";
 
-    document
-        .querySelectorAll(".cart-btn[data-id]")
-        .forEach(button => {
-            button.addEventListener("click", () => addToCart(button));
-        });
+            carttotalBtn.innerText=data.carttotal
+        }
 
+    })
+    .catch(error => {
+
+        console.log(error);
+        alert("Unable to add product.");
+
+    });
+}
 
  // UPDATE UI
         // =========================
 
-        function updateUI() {
+ function updateUI() {
 
             quantitySpan.textContent = quantity;
 
@@ -200,5 +198,6 @@ function addToCart(button) {
             updateTotal();
 
         }
+
 
 

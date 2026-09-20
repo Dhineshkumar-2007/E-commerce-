@@ -1,0 +1,28 @@
+$kind: http-request
+name: Logout
+url: '{{base_url}}/logout'
+method: GET
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      // Test: Status code is 200 or 302
+      pm.test("Logout - Status is 200 or 302", function () {
+          pm.expect(pm.response.code).to.be.oneOf([200, 302]);
+      });
+
+      // Test: Response time is acceptable
+      pm.test("Logout - Response time is less than 2000ms", function () {
+          pm.expect(pm.response.responseTime).to.be.below(2000);
+      });
+
+      // Test: No server error
+      pm.test("Logout - No server error (not 500)", function () {
+          pm.expect(pm.response.code).to.not.equal(500);
+      });
+
+      // Test: Response contains login page
+      pm.test("Logout - Redirects to login page", function () {
+          const body = pm.response.text();
+          pm.expect(body).to.include("login");
+      });

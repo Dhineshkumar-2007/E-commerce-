@@ -1,0 +1,6 @@
+$kind: collection
+name: Flask App
+description: Collection for testing Flask app routes
+variables:
+  - key: base_url
+    value: 'http://127.0.0.1:5000'

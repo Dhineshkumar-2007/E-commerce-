@@ -249,7 +249,33 @@
 
 
 <body>
+<nav class="navbar">
 
+    <div class="logo">
+        🛍️ ShopHub
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/">Home</a>
+
+        <a href="/products">Products</a>
+
+        <a href="/cart">🛒 Cart<span style="color: rgb(0, 0, 0);background-color: rgb(255, 255, 255);width: 35px;margin:5px;height: 10px;border-radius: 50px;padding: 8px;">{{carttotal}}</span></a>
+
+        {% if session.get("id") %}
+
+            <a href="/auth/logout">Logout</a>
+
+        {% else %}
+
+            <a href="/auth/login">Login</a>
+
+        {% endif %}
+
+    </div>
+
+</nav>
 
 <div class="container">
 

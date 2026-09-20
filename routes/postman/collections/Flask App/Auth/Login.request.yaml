@@ -1,0 +1,37 @@
+$kind: http-request
+name: Login
+url: '{{base_url}}/login'
+method: POST
+body:
+  type: formdata
+  content:
+    - key: email
+      type: text
+      value: john@example.com
+    - key: password
+      type: text
+      value: password123
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      // Test: Status code is 200 or 302
+      pm.test("Login - Status is 200 or 302", function () {
+          pm.expect(pm.response.code).to.be.oneOf([200, 302]);
+      });
+
+      // Test: Response time is acceptable
+      pm.test("Login - Response time is less than 2000ms", function () {
+          pm.expect(pm.response.responseTime).to.be.below(2000);
+      });
+
+      // Test: No server error
+      pm.test("Login - No server error (not 500)", function () {
+          pm.expect(pm.response.code).to.not.equal(500);
+      });
+
+      // Test: Response contains HTML
+      pm.test("Login - Response is HTML", function () {
+          const contentType = pm.response.headers.get("Content-Type");
+          pm.expect(contentType).to.include("text/html");
+      });

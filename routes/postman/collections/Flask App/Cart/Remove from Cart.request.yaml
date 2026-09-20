@@ -1,0 +1,4 @@
+$kind: http-request
+name: Remove from Cart
+url: '{{base_url}}/cart/remove/1'
+method: GET

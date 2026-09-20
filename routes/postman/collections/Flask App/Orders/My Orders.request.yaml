@@ -1,0 +1,4 @@
+$kind: http-request
+name: My Orders
+url: '{{base_url}}/orders/my-orders'
+method: GET

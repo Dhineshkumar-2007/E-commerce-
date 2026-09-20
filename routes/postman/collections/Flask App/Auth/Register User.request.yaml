@@ -1,0 +1,48 @@
+$kind: http-request
+name: Register User
+url: '{{base_url}}/register'
+method: POST
+body:
+  type: formdata
+  content:
+    - key: name
+      type: text
+      value: John Doe
+    - key: email
+      type: text
+      value: john@example.com
+    - key: phone
+      type: text
+      value: '9876543210'
+    - key: password
+      type: text
+      value: password123
+    - key: role
+      type: text
+      value: CUSTOMER
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      // Test: Status code is 200 (success) or 302 (redirect to login)
+      pm.test("Register - Status is 200 or 302", function () {
+          pm.expect(pm.response.code).to.be.oneOf([200, 302]);
+      });
+
+      // Test: Response time is acceptable
+      pm.test("Register - Response time is less than 2000ms", function () {
+          pm.expect(pm.response.responseTime).to.be.below(2000);
+      });
+
+      // Test: No server error
+      pm.test("Register - No server error (not 500)", function () {
+          pm.expect(pm.response.code).to.not.equal(500);
+      });
+
+      // Test: If 200, check for login page or error message
+      pm.test("Register - Response contains expected HTML", function () {
+          const body = pm.response.text();
+          pm.expect(body).to.satisfy(function(b) {
+              return b.includes("login") || b.includes("Login") || b.includes("register") || b.includes("Register") || b.includes("already registered");
+          });
+      });

@@ -1,0 +1,4 @@
+$kind: http-request
+name: Get Products
+url: '{{base_url}}/products'
+method: GET

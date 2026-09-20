@@ -1,0 +1,4 @@
+$kind: http-request
+name: Add to Cart
+url: '{{base_url}}/cart/add-to-cart/1'
+method: POST

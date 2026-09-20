@@ -1,0 +1,4 @@
+$kind: http-request
+name: Vendor Orders
+url: '{{base_url}}/orders/vendor-orders'
+method: GET

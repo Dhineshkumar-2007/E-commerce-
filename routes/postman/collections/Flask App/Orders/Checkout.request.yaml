@@ -1,0 +1,4 @@
+$kind: http-request
+name: Checkout
+url: '{{base_url}}/orders'
+method: GET

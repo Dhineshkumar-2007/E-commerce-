@@ -1,0 +1,10 @@
+$kind: http-request
+name: Update Cart
+url: '{{base_url}}/cart/update-cart/1'
+method: POST
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: '{"quantity": 2}'

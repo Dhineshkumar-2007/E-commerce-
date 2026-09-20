@@ -90,7 +90,7 @@
 
             🛒 Cart
 
-            <span
+            <span id ="cart_total-btn"
                 style="
                     color: white;
                     background-color: rgb(30, 31, 30);
@@ -219,7 +219,7 @@
         </p>
 
 
-        <a href="{{ url_for('products.my_products') }}">
+        <a href="{{ url_for('products.get_products') }}">
 
             <button>
 
@@ -305,7 +305,7 @@
     <h2>Featured Products</h2>
 
 
-    <a href="{{ url_for('products.my_products') }}">
+    <a href="{{ url_for('products.get_products') }}">
 
         <button class="view-all-btn">
 

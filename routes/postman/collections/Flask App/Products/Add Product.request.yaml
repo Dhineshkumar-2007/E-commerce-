@@ -1,0 +1,31 @@
+$kind: http-request
+name: Add Product
+url: '{{base_url}}/products/add_product'
+method: POST
+body:
+  type: formdata
+  content:
+    - key: name
+      type: text
+      value: Test Product
+    - key: category_id
+      type: text
+      value: '1'
+    - key: description
+      type: text
+      value: A test product
+    - key: base_price
+      type: text
+      value: '100'
+    - key: mrp
+      type: text
+      value: '120'
+    - key: stock
+      type: text
+      value: '50'
+    - key: gst_rate
+      type: text
+      value: '18'
+    - key: status
+      type: text
+      value: ACTIVE

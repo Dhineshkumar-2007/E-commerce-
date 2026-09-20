@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from utils.db import get_db
 
 
-auth_bp = Blueprint("auth", __name__,template_folder='/templates')
+auth_bp = Blueprint("auth", __name__,template_folder='templates')
 
 
 
@@ -31,9 +31,27 @@ def register():
     password = request.form["password"]
     role = request.form["role"]
 
-    password_hash=generate_password_hash(password)
     db = get_db()
-    cursor = db.cursor()
+    cursor = db.cursor(dictionary=True)
+
+    # Check whether email already exists
+    cursor.execute(
+        "SELECT id FROM users WHERE email = %s",
+        (email,)
+    )
+
+    existing_user = cursor.fetchone()
+
+    if existing_user:
+        cursor.close()
+        db.close()
+
+        return render_template(
+            "register.html",
+            error="Email already registered"
+        )
+
+    password_hash = generate_password_hash(password)
 
     sql = """
     INSERT INTO users
@@ -44,7 +62,6 @@ def register():
         password_hash,
         role
     )
-
     VALUES
     (
         %s,
@@ -66,13 +83,12 @@ def register():
         )
     )
 
-
-  
-
     db.commit()
 
-    return render_template("success.html")
+    cursor.close()
+    db.close()
 
+    return render_template("login.html")
 
 # ===========================
 # LOGIN PAGE
@@ -126,7 +142,7 @@ def login():
             return redirect(url_for("home"))
 
         elif user["role"] == "VENDOR":
-            return redirect(url_for("vendor_dashboard"))
+            return render_template("vendor_dashboard.html")
 
         elif user["role"] == "ADMIN":
             return redirect(url_for("admin_dashboard"))

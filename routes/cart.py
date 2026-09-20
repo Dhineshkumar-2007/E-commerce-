@@ -67,8 +67,12 @@ def add_to_cart(product_id):
         cart.append(product)
 
     session["cart"] = cart
+    carttotal=len(cart)
 
-    return "ok"
+    return jsonify({
+        "status": "ok",
+        "carttotal": carttotal
+    })
 
 #update cart 
 @cart_bp.route("/update-cart/<int:product_id>", methods=["POST"])

@@ -1,0 +1,4 @@
+$kind: http-request
+name: View Cart
+url: '{{base_url}}/cart'
+method: GET

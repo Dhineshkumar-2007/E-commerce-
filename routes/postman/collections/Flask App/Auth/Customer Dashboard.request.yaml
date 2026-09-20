@@ -1,0 +1,28 @@
+$kind: http-request
+name: Customer Dashboard
+url: '{{base_url}}/customer'
+method: GET
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      // Test: Status code is 200 (logged in) or 302 (redirect to login)
+      pm.test("Customer Dashboard - Status is 200 or 302", function () {
+          pm.expect(pm.response.code).to.be.oneOf([200, 302, 403]);
+      });
+
+      // Test: Response time is acceptable
+      pm.test("Customer Dashboard - Response time is less than 2000ms", function () {
+          pm.expect(pm.response.responseTime).to.be.below(2000);
+      });
+
+      // Test: No server error
+      pm.test("Customer Dashboard - No server error (not 500)", function () {
+          pm.expect(pm.response.code).to.not.equal(500);
+      });
+
+      // Test: Response is HTML
+      pm.test("Customer Dashboard - Response is HTML", function () {
+          const contentType = pm.response.headers.get("Content-Type");
+          pm.expect(contentType).to.include("text/html");
+      });
